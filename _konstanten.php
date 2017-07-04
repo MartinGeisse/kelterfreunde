@@ -7,6 +7,7 @@ if (empty($including)) {
 define('SLOTS_PRO_TAG', 10);
 define('ERSTER_SLOT_STUNDEN', 9);
 define('ERSTER_SLOT_MINUTEN', 0);
+define('SLOT_DAUER', 30);
 
 function ersterSlotZeit() {
 	return array(ERSTER_SLOT_STUNDEN, ERSTER_SLOT_MINUTEN);
