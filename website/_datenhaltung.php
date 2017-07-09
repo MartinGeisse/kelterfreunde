@@ -8,44 +8,57 @@ if (empty($including)) {
 
 function dh_holeBelegungBitmap($jahr, $monat, $tag) {
 	$result = array();
-	$zeit = ersterSlotZeit();
-	for ($i=0; $i<SLOTS_PRO_TAG; $i++) {
-		array_push($result, array(
-			'zeit' => $zeit,
-			'belegt' => rand() % 2,
-		));
-		$zeit = zt_addiereMinuten($zeit, SLOT_DAUER);
+	for ($i=0; $i<ANZAHL_BLOCKS; $i++) {
+		$slotAnzahl = getBlockAnzahlSlots($i);
+		$zeit = getBlockStartzeit($i);
+		$slots = array();
+		for ($j=0; $j<$slotAnzahl; $j++) {
+			array_push($slots, array(
+				'zeit' => $zeit,
+				'belegt' => rand() % 2,
+			));
+			$zeit = zt_addiereMinuten($zeit, SLOT_DAUER);
+		}
+		array_push($result, $slots);
 	}
 	return $result;
 }
 
 function dh_holeBelegungVollstaendig($jahr, $monat, $tag) {
 	$result = array();
-	$zeit = ersterSlotZeit();
-	for ($i=0; $i<SLOTS_PRO_TAG; $i++) {
-		
-		if (rand() % 2) {
-			array_push($result, array(
+	for ($i=0; $i<ANZAHL_BLOCKS; $i++) {
+		$slotAnzahl = getBlockAnzahlSlots($i);
+		$zeit = getBlockStartzeit($i);
+		$slots = array();
+		for ($j=0; $j<$slotAnzahl; $j++) {
+			
+			// nicht belegt
+			if (rand() % 2) {
+				array_push($slots, array(
+					'zeit' => $zeit,
+					'belegt' => 0,
+				));
+				$zeit = zt_addiereMinuten($zeit, SLOT_DAUER);
+				continue;
+			}
+
+			// Name
+			$buchstaben = range('a', 'z');
+			$name = '';
+			for ($k=0; $k<5; $k++) {
+				$name .= $buchstaben[array_rand($buchstaben)];
+			}
+
+			// Slot
+			array_push($slots, array(
 				'zeit' => $zeit,
-				'belegt' => 0,
+				'belegt' => 1,
+				'name' => $name,
 			));
+
 			$zeit = zt_addiereMinuten($zeit, SLOT_DAUER);
-			continue;
 		}
-
-		$buchstaben = range('a', 'z');
-		$name = '';
-		for ($j=0; $j<5; $j++) {
-			$name .= $buchstaben[array_rand($buchstaben)];
-		}
-
-		array_push($result, array(
-			'zeit' => $zeit,
-			'belegt' => 1,
-			'name' => $name,
-		));
-
-		$zeit = zt_addiereMinuten($zeit, SLOT_DAUER);
+		array_push($result, $slots);
 	}
 	return $result;
 }
