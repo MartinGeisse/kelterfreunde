@@ -5,6 +5,7 @@ require('_konstanten.php');
 require('_zeit.php');
 require('_datenbank.php');
 require('_datenhaltung.php');
+require('_besucherschluessel.php');
 
 foreach (dh_holeBelegungBitmap(2017, 01, 01) as $slot) {
 	echo zt_zeitpunktText($slot['zeit']), ' - ', $slot['belegt'], "\n";
@@ -21,3 +22,7 @@ foreach (dh_holeBelegungVollstaendig(2017, 01, 01) as $slot) {
 	}
 	echo "\n";
 }
+
+echo '--------------------------', "\n";
+
+echo bs_erzeugeBesucherschluessel(), "\n";
