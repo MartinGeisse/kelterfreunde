@@ -4,11 +4,25 @@ if (empty($including)) {
 	die();
 }
 
-define('SLOTS_PRO_TAG', 10);
-define('ERSTER_SLOT_STUNDEN', 9);
-define('ERSTER_SLOT_MINUTEN', 0);
 define('SLOT_DAUER', 30);
+define('ANZAHL_BLOCKS', 2);
 
-function ersterSlotZeit() {
-	return array(ERSTER_SLOT_STUNDEN, ERSTER_SLOT_MINUTEN);
+function getBlockAnzahlSlots($block) {
+	if ($block == 0) {
+		return 6;
+	} else if ($block == 1) {
+		return 7;
+	} else {
+		die('ungültige Blocknummer: ' . $block);
+	}
+}
+
+function getBlockStartzeit($block) {
+	if ($block == 0) {
+		return array(9, 30);
+	} else if ($block == 1) {
+		return array(13, 30);
+	} else {
+		die('ungültige Blocknummer: ' . $block);
+	}
 }
