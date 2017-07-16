@@ -14,3 +14,4 @@ header('Content-Type: text/html; charset=utf-8');
 	<script type="text/javascript" src="bootstrap.min.js"></script>
 </head>
 <body>
+<div class="container">

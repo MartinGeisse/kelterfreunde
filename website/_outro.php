@@ -5,5 +5,6 @@ if (empty($including)) {
 }
 
 ?>
+</div>
 </body>
 </html>
