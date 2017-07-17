@@ -7,43 +7,112 @@ require('_datenbank.php');
 require('_datenhaltung.php');
 require('_intro.php');
 
-$jahr = 2017;
-$monat = 2;
-$tag = 23;
-$blockNummer = 0;
-$slotNummer = 3;
+//
+// Verarbeitung der Querystring-Parameter
+//
+function getQuerystringIntParameter($key, $min = null, $max = null) {
+	if (!array_key_exists($key, $_GET)) {
+		die('fehlender URL-Parameter: ' . $key);
+	}
+	$value = (string)($_GET[$key]);
+	if (((string)(int)$value) != $value) {
+		die('falsches Parameterformat (int erwartet) für URL-Parameter: ' . $key);
+	}
+	$value = (int)$value;
+	if ($min !== null && $value < $min) {
+		die('Wert zu klein für URL-Parameter: ' . $key . ' (Mindestwert: ' . $min . ')');
+	}
+	if ($max !== null && $value > $max) {
+		die('Wert zu groß für URL-Parameter: ' . $key . ' (Maximalwert: ' . $max . ')');
+	}
+	return $value;
+}
+$jahr = getQuerystringIntParameter('jahr', 2017, 2099);
+$monat = getQuerystringIntParameter('monat', 1, 12);
+$tag = getQuerystringIntParameter('tag', 1, 31);
+if (!dt_datumValide($tag, $monat, $jahr)) {
+	die('ungültiges Datum: ' . $tag . '.' . $monat . '.' . $jahr);
+}
+$blocknummer = getQuerystringIntParameter('blocknummer', 0, ANZAHL_BLOCKS - 1);
+$slotnummer = getQuerystringIntParameter('slotnummer', 0, getBlockAnzahlSlots($blocknummer) - 1);
 
-$blockStartzeit = getBlockStartzeit($blockNummer);
-$slotStartzeit = zt_addiereMinuten($blockStartzeit, $slotNummer * SLOT_DAUER);
+//
+// lesbare Zeiten berechnen
+//
+$blockStartzeit = getBlockStartzeit($blocknummer);
+$slotStartzeit = zt_addiereMinuten($blockStartzeit, $slotnummer * SLOT_DAUER);
 $slotEndezeit = zt_addiereMinuten($slotStartzeit, SLOT_DAUER);
 
-$fields = array(
-	'vonSlot' => '',
-	'bisSlot' => '',
-	'name' => '',
-);
-foreach ($_REQUEST as $key => $value) {
-	if (array_key_exists($key, $fields)) {
-		$fields[$key] = $value;
-	}
-}
-
+//
+// ggf. Formularverarbeitung
+//
 $validationErrors = array();
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-	// TODO
-
-	if (empty($fields['name'])) {
-		$validationErrors['name'] = 'Bitte geben Sie hier Ihren Namen ein.';
+	//
+	// einlesen der Formularfelder
+	//
+	$fields = array(
+		'name' => '',
+		'telefonnummer' => '',
+	);
+	foreach ($_POST as $key => $value) {
+		if (array_key_exists($key, $fields)) {
+			$value = trim($value);
+			if (!empty($value)) {
+				$fields[$key] = $value;
+			}
+		}
 	}
 
-	if (empty($validationErrors)) {
-		// TODO buchen
-		header('Location: uebersicht-besucher.php', true, 302);
+	//
+	// Validierung der Formularfelder
+	//
+	$validationErrors = array();
+	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+		// Name
+		if (empty($fields['name'])) {
+			$nameValide = false;
+		} else {
+			$name = trim($fields['name']);
+			if (strlen($name) < 3) {
+				$nameValide = false;
+			} else if (strpos($name, ' ') === false) {
+				$nameValide = false;
+			} else {
+				$nameValide = true;
+			}
+		}
+		if (!$nameValide) {
+			$validationErrors['name'] = 'Bitte geben Sie hier Ihren Vor- und Nachnamen ein.';
+		}
+
+		// Telefonnummer
+		if (empty($fields['telefonnummer']) || empty(trim($fields['telefonnummer']))) {
+			$validationErrors['telefonnummer'] = 'Bitte geben Sie hier Ihre Telefonnummer ein.';
+		}
+		$telefonnummer = trim($fields['telefonnummer']);
+		$telefonnummer = strtr($telefonnummer, '/-()', '    ');
+		$telefonnummer = str_replace(' ', '', $telefonnummer);
+		if (!preg_match('/^[0-9]*$/', $telefonnummer)) {
+			$telefonnummer = strtr($telefonnummer, '1234567890', '          ');
+			$telefonnummer = str_replace(' ', '', $telefonnummer);
+			$validationErrors['telefonnummer'] = 'Die Telefonnummer enthält ungültige Zeichen: ' . substr($telefonnummer, 0, 1);
+		}
+
+		// weitere Verarbeitung
+		if (empty($validationErrors)) {
+			// TODO buchen $name, $telefonnummer
+			header('Location: uebersicht-besucher.php', true, 302);
+		}
 	}
+
 }
 
+//
+// Hilfsfunktionen zur Darstellung
+//
 function printValidationError($key) {
 	global $validationErrors;
 	if (!empty($validationErrors[$key])) {
@@ -51,6 +120,9 @@ function printValidationError($key) {
 	}
 }
 
+//
+// Darstellung
+//
 ?>
 <h1>Termin Buchen: <?= $tag ?>.<?= $monat ?>.<?= $jahr ?> <?= zt_zeitpunktText($slotStartzeit) ?> - <?= zt_zeitpunktText($slotEndezeit) ?></h1>
 

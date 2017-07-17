@@ -7,6 +7,7 @@ CREATE TABLE `kelterfreunde`.`buchungen` (
     `blocknummer` TINYINT NOT NULL,
     `slotnummer` TINYINT NOT NULL,
     `name` VARCHAR(255) NOT NULL,
+    `telefonnummer` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
 ALTER TABLE `kelterfreunde`.`buchungen` ADD UNIQUE `zeitindex` (`jahr`, `monat`, `tag`, `blocknummer`, `slotnummer`);
