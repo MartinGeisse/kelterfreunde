@@ -7,6 +7,11 @@ if (empty($including)) {
 // dev test
 
 function dh_holeBelegungBitmap($jahr, $monat, $tag) {
+
+	$rows = db_holeBuchungenFuerTag($jahr, $monat, $tag, array('blocknummer', 'slotnummer'));
+	echo '<pre>'; var_dump($rows);
+	die();
+
 	$result = array();
 	for ($i=0; $i<ANZAHL_BLOCKS; $i++) {
 		$slotAnzahl = getBlockAnzahlSlots($i);
