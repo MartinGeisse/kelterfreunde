@@ -1,10 +1,10 @@
 <?php
 
 $including = true;
-require('_konstanten.php');
-require('_zeit.php');
-require('_datenbank.php');
-require('_datenhaltung.php');
+require_once('_konstanten.php');
+require_once('_zeit.php');
+require_once('_datenbank.php');
+require_once('_datenhaltung.php');
 require('_intro.php');
 
 //
