@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		if (empty($validationErrors)) {
 			$success = db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer);
 			if ($success) {
-				header('Location: uebersicht-besucher.php', true, 302);
+				header('Location: uebersicht-besucher.php?jahr='.$jahr.'&monat='.$monat.'&tag='.$tag, true, 302);
 			} else {
 				header('Location: schon-gebucht.php', true, 302);
 			}
