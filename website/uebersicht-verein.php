@@ -23,7 +23,7 @@ $belegung = dh_holeBelegungVollstaendig($jahr, $monat, $tag);
 			<li>
                 <?= zt_zeitpunktText($slot['zeit']) ?> - <?= zt_zeitpunktText(zt_addiereMinuten($slot['zeit'], SLOT_DAUER)) ?>:
                 <?php if ($slot['belegt']): ?>
-                    <?= $slot['name'] ?>
+                    <?= $slot['name'] ?>, <?= $slot['telefonnummer'] ?>
                 <?php else: ?>
                     ---
                 <?php endif; ?>
