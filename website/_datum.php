@@ -81,3 +81,19 @@ function dt_addiereTage($datum, $tage) {
 function dt_montagDerselbenWoche($datum) {
 	return dt_addiereTage($datum, 1 - dt_wochentag($datum));
 }
+
+function dt_getWochentagNameFuerNummer($wochentagnummer) {
+	if ($wochentagnummer < 1 || $wochentagnummer > 7) {
+		die('ungültige Wochentagnummer: ' . $wochentagnummer);
+	}
+	$namen = array(
+		'Montag',
+		'Dienstag',
+		'Mittwoch',
+		'Donnerstag',
+		'Freitag',
+		'Samstag',
+		'Sonntag',
+	);
+	return $namen[$wochentagnummer - 1];
+}
