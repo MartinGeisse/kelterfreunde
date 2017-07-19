@@ -3,6 +3,7 @@
 $including = true;
 require_once('_konstanten.php');
 require_once('_zeit.php');
+require_once('_datum.php');
 require_once('_datenbank.php');
 require_once('_datenhaltung.php');
 require('_intro.php');

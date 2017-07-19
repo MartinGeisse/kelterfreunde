@@ -67,3 +67,7 @@ function dh_holeBelegungVollstaendig($jahr, $monat, $tag) {
 	}
 	return $result;
 }
+
+function dh_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer) {
+	return db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer);
+}

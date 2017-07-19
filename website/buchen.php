@@ -3,6 +3,7 @@
 $including = true;
 require_once('_konstanten.php');
 require_once('_zeit.php');
+require_once('_datum.php');
 require_once('_datenbank.php');
 require_once('_datenhaltung.php');
 require('_intro.php');
@@ -47,15 +48,16 @@ $slotEndezeit = zt_addiereMinuten($slotStartzeit, SLOT_DAUER);
 // ggf. Formularverarbeitung
 //
 $validationErrors = array();
+$fields = array(
+	'name' => '',
+	'telefonnummer' => '',
+);
+$validationErrors = array();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 	//
 	// einlesen der Formularfelder
 	//
-	$fields = array(
-		'name' => '',
-		'telefonnummer' => '',
-	);
 	foreach ($_POST as $key => $value) {
 		if (array_key_exists($key, $fields)) {
 			$value = trim($value);
@@ -68,7 +70,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	//
 	// Validierung der Formularfelder
 	//
-	$validationErrors = array();
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		// Name
@@ -103,8 +104,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		// weitere Verarbeitung
 		if (empty($validationErrors)) {
-			// TODO buchen $name, $telefonnummer
-			header('Location: uebersicht-besucher.php', true, 302);
+			$success = db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer);
+			if ($success) {
+				header('Location: uebersicht-besucher.php', true, 302);
+			} else {
+				header('Location: schon-gebucht.php', true, 302);
+			}
 		}
 	}
 
@@ -126,7 +131,7 @@ function printValidationError($key) {
 ?>
 <h1>Termin Buchen: <?= $tag ?>.<?= $monat ?>.<?= $jahr ?> <?= zt_zeitpunktText($slotStartzeit) ?> - <?= zt_zeitpunktText($slotEndezeit) ?></h1>
 
-<form class="form" method="POST" action="buchen.php">
+<form class="form" method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
 <?php /*
 	<?php printValidationError('vonSlot'); ?>
 	<div>von slot # <input type="text" name="von" value="<?= htmlspecialchars($fields['vonSlot']) ?>"></div>
@@ -138,6 +143,12 @@ function printValidationError($key) {
 	<?php printValidationError('name'); ?>
 	<div><input class="form-control" type="text" name="name" value="<?= htmlspecialchars($fields['name']) ?>"></div>
 	<br>
+
+	<div><label for="telefonnummer">Telefon</label></div>
+	<?php printValidationError('telefonnummer'); ?>
+	<div><input class="form-control" type="text" name="telefonnummer" value="<?= htmlspecialchars($fields['telefonnummer']) ?>"></div>
+	<br>
+	
 	<div><input class="btn btn-primary" type="submit" value="buchen"> oder <a href="uebersicht-besucher.php">zurück</a></div>
 </form>
 

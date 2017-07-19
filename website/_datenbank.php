@@ -17,6 +17,9 @@ function db_holeBuchungenFuerTag($jahr, $monat, $tag, $felder) {
 	$statement = $databaseConnection->prepare($query);
 	$statement->bind_param('iii', $jahr, $monat, $tag);
 	$statement->execute();
+	if (!empty($statement->error_list)) {
+		die('Datenbankabfrage fehlgeschlagen');
+	}
 	$resultSet = $statement->get_result();
 	$resultRows = array();
 	while ($row = $resultSet->fetch_array(MYSQLI_ASSOC)) {
@@ -24,4 +27,23 @@ function db_holeBuchungenFuerTag($jahr, $monat, $tag, $felder) {
 	}
 	$statement->close();
 	return $resultRows;
+}
+
+function db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer) {
+	global $databaseConnection;
+	$query = 'INSERT INTO `buchungen` (`jahr`, `monat`, `tag`, `blocknummer`, `slotnummer`, `name`, `telefonnummer`) VALUES (?, ?, ?, ?, ?, ?, ?)';
+	$statement = $databaseConnection->prepare($query);
+	$statement->bind_param('iiiiiss', $jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer);
+	$statement->execute();
+	$errors = $statement->error_list;
+	$statement->close();
+	if (count($errors) == 1 && $errors[0]['errno'] == 1062) {
+		// duplicate entry
+		return false;
+	}
+	if (!empty($errors)) {
+		// other errors
+		die('Datenbankänderung fehlgeschlagen');
+	}
+	return true;
 }
