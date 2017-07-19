@@ -4,7 +4,10 @@ if (empty($including)) {
 	die();
 }
 
+require_once('_db1u0p9_w3l6osc7.php');
+
 function au_generateSignature($timestamp) {
+	global $authorizationConfiguration;
 	return hash_hmac('sha256', $timestamp, $authorizationConfiguration['secret']);
 }
 
@@ -13,7 +16,7 @@ function au_generateTokenFromExpirationTimestamp($timestamp) {
 }
 
 function au_generateNewToken() {
-	return au_generateTokenFromExpirationTimestamp(time() + 2 * 3600);
+	return au_generateTokenFromExpirationTimestamp(time() + 2 * 3600); // TODO test timeout
 }
 
 function au_validateToken($token) {
@@ -24,7 +27,7 @@ function au_validateToken($token) {
 	if (count($segments) != 2) {
 		return false;
 	}
-	return au_generateSignature($segments[0]) == $segments[1];
+	return (au_generateSignature($segments[0]) == $segments[1]) && (time() < $segments[0]); // TODO test wrong signature
 }
 
 function au_sendCookie() {
@@ -32,7 +35,7 @@ function au_sendCookie() {
 }
 
 function au_checkCookie() {
-	return isset($_COOKIE['authorization']) && au_validateToken(_COOKIE['authorization']);
+	return isset($_COOKIE['authorization']) && au_validateToken($_COOKIE['authorization']);
 }
 
 function au_clearCookie() {

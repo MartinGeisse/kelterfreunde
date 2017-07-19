@@ -8,6 +8,7 @@ require_once('_querystring.php');
 require_once('_responsive.php');
 require_once('_datenbank.php');
 require_once('_datenhaltung.php');
+require_once('_authorization.php');
 require('_intro.php');
 
 $montag = getQuerystringMontag(true);
@@ -27,8 +28,15 @@ $sonntag = dt_addiereTage($montag, 6);
 
 <?php $datum = $montag; ?>
 <?php for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++): ?>
-	<?php $belegung = dh_holeBelegungBitmap($datum['jahr'], $datum['monat'], $datum['tag']); ?>
-	<?php $buchenBasisUrl = 'buchen.php?jahr=' . $datum['jahr'] . '&monat=' . $datum['monat'] . '&tag=' . $datum['tag']; ?>
+	<?php
+		$eingeloggt = au_checkCookie();
+		if ($eingeloggt) {
+			$belegung = dh_holeBelegungVollstaendig($datum['jahr'], $datum['monat'], $datum['tag']);
+		} else {
+			$belegung = dh_holeBelegungBitmap($datum['jahr'], $datum['monat'], $datum['tag']);
+		}
+		$buchenBasisUrl = 'buchen.php?jahr=' . $datum['jahr'] . '&monat=' . $datum['monat'] . '&tag=' . $datum['tag'];
+	?>
 	<h2><?= dt_getWochentagNameFuerNummer($wochentagnummer) ?>, <?= $datum['tag'] ?>.<?= $datum['monat'] ?>.<?= $datum['jahr'] ?></h2>
 	<?php foreach ($belegung as $blocknummer => $block): ?>
 		<br />
@@ -37,8 +45,20 @@ $sonntag = dt_addiereTage($montag, 6);
 			<ul>
 				<li>
 					<?= zt_zeitpunktText($slot['zeit']) ?> - <?= zt_zeitpunktText(zt_addiereMinuten($slot['zeit'], SLOT_DAUER)) ?>:
-					<?= $slot['belegt'] ? 'belegt' : '---' ?>
-					<?php if (!$slot['belegt']): ?>&nbsp;&nbsp;&nbsp;<a href="<?= $buchenUrl ?>">buchen</a><?php endif; ?>
+					<?php
+						if ($slot['belegt']) {
+							if ($eingeloggt) {
+								echo $slot['name'] . ', ' . $slot['telefonnummer'];
+							} else {
+								echo 'belegt';
+							}
+						} else {
+							echo '---';
+							if (!$eingeloggt) {
+								echo '&nbsp;&nbsp;&nbsp;<a href="<?= $buchenUrl ?>">buchen</a>';
+							}
+						}
+					?>
 				</li>
 			</ul>
 		<?php endforeach; ?>
@@ -47,5 +67,6 @@ $sonntag = dt_addiereTage($montag, 6);
 <?php endfor; ?>
 
 <a href="login.php?<?= $_SERVER['QUERY_STRING'] ?>">login</a><br>
+<a href="logout.php?<?= $_SERVER['QUERY_STRING'] ?>">logout</a><br>
 
 <?php require('_outro.php');
