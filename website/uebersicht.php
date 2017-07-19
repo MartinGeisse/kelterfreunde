@@ -19,9 +19,9 @@ $sonntag = dt_addiereTage($montag, 6);
 	&emsp;
 	<span style="font-size: smaller">
 		<?php $datum = dt_addiereTage($montag, -7); ?>
-		<a class="glyphicon glyphicon-chevron-left" href="uebersicht-besucher.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"></a>
+		<a class="glyphicon glyphicon-chevron-left" href="uebersicht.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"></a>
 		<?php $datum = dt_addiereTage($montag, 7); ?>
-		<a class="glyphicon glyphicon-chevron-right" href="uebersicht-besucher.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"></a>
+		<a class="glyphicon glyphicon-chevron-right" href="uebersicht.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"></a>
 	</span>
 </h1>
 
@@ -45,5 +45,7 @@ $sonntag = dt_addiereTage($montag, 6);
 	<?php endforeach; ?>
 	<?php $datum = dt_addiereTage($datum, 1); ?>
 <?php endfor; ?>
+
+<a href="login.php?<?= $_SERVER['QUERY_STRING'] ?>">login</a><br>
 
 <?php require('_outro.php');

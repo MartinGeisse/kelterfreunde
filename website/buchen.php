@@ -5,10 +5,10 @@ require_once('_konstanten.php');
 require_once('_zeit.php');
 require_once('_datum.php');
 require_once('_querystring.php');
+require_once('_form.php');
 require_once('_responsive.php');
 require_once('_datenbank.php');
 require_once('_datenhaltung.php');
-require('_intro.php');
 
 //
 // Verarbeitung der Querystring-Parameter
@@ -37,87 +37,63 @@ $slotEndezeit = zt_addiereMinuten($slotStartzeit, SLOT_DAUER);
 //
 // ggf. Formularverarbeitung
 //
-$validationErrors = array();
-$fields = array(
+$formFields = array(
 	'name' => '',
 	'telefonnummer' => '',
 );
-$validationErrors = array();
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-	//
-	// einlesen der Formularfelder
-	//
-	foreach ($_POST as $key => $value) {
-		if (array_key_exists($key, $fields)) {
-			$value = trim($value);
-			if (!empty($value)) {
-				$fields[$key] = $value;
-			}
-		}
-	}
+if (handleForm()) {
 
 	//
 	// Validierung der Formularfelder
 	//
-	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-		// Name
-		if (empty($fields['name'])) {
+	// Name
+	if (empty($formFields['name'])) {
+		$nameValide = false;
+	} else {
+		$name = trim($formFields['name']);
+		if (strlen($name) < 3) {
+			$nameValide = false;
+		} else if (strpos($name, ' ') === false) {
 			$nameValide = false;
 		} else {
-			$name = trim($fields['name']);
-			if (strlen($name) < 3) {
-				$nameValide = false;
-			} else if (strpos($name, ' ') === false) {
-				$nameValide = false;
-			} else {
-				$nameValide = true;
-			}
+			$nameValide = true;
 		}
-		if (!$nameValide) {
-			$validationErrors['name'] = 'Bitte geben Sie hier Ihren Vor- und Nachnamen ein.';
-		}
+	}
+	if (!$nameValide) {
+		$validationErrors['name'] = 'Bitte geben Sie hier Ihren Vor- und Nachnamen ein.';
+	}
 
-		// Telefonnummer
-		if (empty($fields['telefonnummer']) || empty(trim($fields['telefonnummer']))) {
-			$validationErrors['telefonnummer'] = 'Bitte geben Sie hier Ihre Telefonnummer ein.';
-		}
-		$telefonnummer = trim($fields['telefonnummer']);
-		$telefonnummer = strtr($telefonnummer, '/-()', '    ');
+	// Telefonnummer
+	if (empty($formFields['telefonnummer']) || empty(trim($formFields['telefonnummer']))) {
+		$validationErrors['telefonnummer'] = 'Bitte geben Sie hier Ihre Telefonnummer ein.';
+	}
+	$telefonnummer = trim($formFields['telefonnummer']);
+	$telefonnummer = strtr($telefonnummer, '/-()', '    ');
+	$telefonnummer = str_replace(' ', '', $telefonnummer);
+	if (!preg_match('/^[0-9]*$/', $telefonnummer)) {
+		$telefonnummer = strtr($telefonnummer, '1234567890', '          ');
 		$telefonnummer = str_replace(' ', '', $telefonnummer);
-		if (!preg_match('/^[0-9]*$/', $telefonnummer)) {
-			$telefonnummer = strtr($telefonnummer, '1234567890', '          ');
-			$telefonnummer = str_replace(' ', '', $telefonnummer);
-			$validationErrors['telefonnummer'] = 'Die Telefonnummer enthält ungültige Zeichen: ' . substr($telefonnummer, 0, 1);
-		}
-
-		// weitere Verarbeitung
-		if (empty($validationErrors)) {
-			$success = db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer);
-			if ($success) {
-				header('Location: uebersicht-besucher.php?jahr='.$jahr.'&monat='.$monat.'&tag='.$tag, true, 302);
-			} else {
-				header('Location: schon-gebucht.php', true, 302);
-			}
-		}
+		$validationErrors['telefonnummer'] = 'Die Telefonnummer enthält ungültige Zeichen: ' . substr($telefonnummer, 0, 1);
 	}
 
-}
-
-//
-// Hilfsfunktionen zur Darstellung
-//
-function printValidationError($key) {
-	global $validationErrors;
-	if (!empty($validationErrors[$key])) {
-		echo '<div class="feedback-message alert alert-danger">', $validationErrors[$key], '</div>', "\n";
+	// weitere Verarbeitung
+	if (empty($validationErrors)) {
+		$success = db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer);
+		if ($success) {
+			header('Location: uebersicht.php?jahr='.$jahr.'&monat='.$monat.'&tag='.$tag, true, 302);
+		} else {
+			header('Location: schon-gebucht.php', true, 302);
+		}
+		die();
 	}
+
 }
 
 //
 // Darstellung
 //
+require('_intro.php');
 ?>
 <h1>Termin Buchen: <?= $tag ?>.<?= $monat ?>.<?= $jahr ?> <?= zt_zeitpunktText($slotStartzeit) ?> - <?= zt_zeitpunktText($slotEndezeit) ?></h1>
 
@@ -139,7 +115,7 @@ function printValidationError($key) {
 	<div><input class="form-control" type="text" name="telefonnummer" value="<?= htmlspecialchars($fields['telefonnummer']) ?>"></div>
 	<br>
 	
-	<div><input class="btn btn-primary" type="submit" value="buchen"> oder <a href="uebersicht-besucher.php">zurück</a></div>
+	<div><input class="btn btn-primary" type="submit" value="buchen"> oder <a href="uebersicht.php">zurück</a></div>
 </form>
 
 <?php require('_outro.php');
