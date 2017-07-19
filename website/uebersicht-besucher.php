@@ -4,13 +4,18 @@ $including = true;
 require_once('_konstanten.php');
 require_once('_zeit.php');
 require_once('_datum.php');
+require_once('_querystring.php');
 require_once('_datenbank.php');
 require_once('_datenhaltung.php');
 require('_intro.php');
 
-$jahr = 2017;
-$monat = 2;
-$tag = 23;
+$montag = getQuerystringMontag(true);
+
+// TODO
+$jahr = $montag['jahr'];
+$monat = $montag['monat'];
+$tag = $montag['tag'];
+
 $belegung = dh_holeBelegungBitmap($jahr, $monat, $tag);
 $buchenBasisUrl = 'buchen.php?jahr=' . $jahr . '&monat=' . $monat . '&tag=' . $tag;
 

@@ -4,6 +4,7 @@ $including = true;
 require_once('_konstanten.php');
 require_once('_zeit.php');
 require_once('_datum.php');
+require_once('_querystring.php');
 require_once('_datenbank.php');
 require_once('_datenhaltung.php');
 require('_intro.php');
@@ -11,27 +12,15 @@ require('_intro.php');
 //
 // Verarbeitung der Querystring-Parameter
 //
-function getQuerystringIntParameter($key, $min = null, $max = null) {
-	if (!array_key_exists($key, $_GET)) {
-		die('fehlender URL-Parameter: ' . $key);
-	}
-	$value = (string)($_GET[$key]);
-	if (((string)(int)$value) != $value) {
-		die('falsches Parameterformat (int erwartet) für URL-Parameter: ' . $key);
-	}
-	$value = (int)$value;
-	if ($min !== null && $value < $min) {
-		die('Wert zu klein für URL-Parameter: ' . $key . ' (Mindestwert: ' . $min . ')');
-	}
-	if ($max !== null && $value > $max) {
-		die('Wert zu groß für URL-Parameter: ' . $key . ' (Maximalwert: ' . $max . ')');
-	}
-	return $value;
-}
 $jahr = getQuerystringIntParameter('jahr', 2017, 2099);
 $monat = getQuerystringIntParameter('monat', 1, 12);
 $tag = getQuerystringIntParameter('tag', 1, 31);
-if (!dt_datumValide($tag, $monat, $jahr)) {
+$datum = array(
+	'jahr' => $jahr,
+	'monat' => $monat,
+	'tag' => $tag,
+);
+if (!dt_datumValide($datum)) {
 	die('ungültiges Datum: ' . $tag . '.' . $monat . '.' . $jahr);
 }
 $blocknummer = getQuerystringIntParameter('blocknummer', 0, ANZAHL_BLOCKS - 1);

@@ -35,15 +35,49 @@ function dt_letzterTagDesMonats($monat, $jahr) {
 	return $tabelle[$monat - 1];
 }
 
-function dt_datumValide($tag, $monat, $jahr) {
-	if ($tag < 1 || $monat < 1 || $jahr < 2000) {
+function dt_datumValide($datum) {
+	if ($datum['tag'] < 1 || $datum['monat'] < 1 || $datum['jahr'] < 2000) {
 		return false;
 	}
-	if ($monat > 12 || $jahr > 2099) {
+	if ($datum['monat'] > 12 || $datum['jahr'] > 2099) {
 		return false;
 	}
-	if ($tag > dt_letzterTagDesMonats($monat, $jahr)) {
+	if ($datum['tag'] > dt_letzterTagDesMonats($datum['monat'], $datum['jahr'])) {
 		return false;
 	}
 	return true;
+}
+
+function dt_wochentag($datum) {
+	$timestamp = strtotime($datum['jahr'] . '-' . $datum['monat'] . '-' . $datum['tag'] . ' 12:00:00');
+	return date('N', $timestamp);
+}
+
+function dt_addiereTage($datum, $tage) {
+	$datum['tag'] += $tage;
+	while ($datum['tag'] <= 0) {
+		$datum['monat']--;
+		if ($datum['monat'] == 0) {
+			$datum['monat'] = 12;
+			$datum['jahr']--;
+		}
+		$datum['tag'] += dt_letzterTagDesMonats($datum['monat'], $datum['jahr']);
+	}
+	while (true) {
+		$letzter = dt_letzterTagDesMonats($datum['monat'], $datum['jahr']);
+		if ($datum['tag'] <= $letzter) {
+			break;
+		}
+		$datum['tag'] -= $letzter;
+		$datum['monat']++;
+		if ($datum['monat'] == 13) {
+			$datum['monat'] = 1;
+			$datum['jahr']++;
+		}
+	}
+	return $datum;
+}
+
+function dt_montagDerselbenWoche($datum) {
+	return dt_addiereTage($datum, 1 - dt_wochentag($datum));
 }
