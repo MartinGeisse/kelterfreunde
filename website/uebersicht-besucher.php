@@ -13,7 +13,16 @@ $montag = getQuerystringMontag(true);
 $sonntag = dt_addiereTage($montag, 6);
 
 ?>
-<h1>Keltertermine <?= $montag['tag'] ?>.<?= $montag['monat'] ?>.<?= $montag['jahr'] ?> - <?= $sonntag['tag'] ?>.<?= $sonntag['monat'] ?>.<?= $sonntag['jahr'] ?></h1>
+<h1>
+	Keltertermine <?= $montag['tag'] ?>.<?= $montag['monat'] ?>.<?= $montag['jahr'] ?> - <?= $sonntag['tag'] ?>.<?= $sonntag['monat'] ?>.<?= $sonntag['jahr'] ?>
+	&emsp;
+	<span style="font-size: smaller">
+		<?php $datum = dt_addiereTage($montag, -7); ?>
+		<a class="glyphicon glyphicon-chevron-left" href="uebersicht-besucher.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"></a>
+		<?php $datum = dt_addiereTage($montag, 7); ?>
+		<a class="glyphicon glyphicon-chevron-right" href="uebersicht-besucher.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"></a>
+	</span>
+</h1>
 
 <?php $datum = $montag; ?>
 <?php for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++): ?>
