@@ -8,10 +8,7 @@ if (empty($including)) {
 
 function dh_holeBelegungBitmap($jahr, $monat, $tag) {
 
-	$rows = db_holeBuchungenFuerTag($jahr, $monat, $tag, array('blocknummer', 'slotnummer'));
-	echo '<pre>'; var_dump($rows);
-	die();
-
+	// leeres Ergebnis erzeugen
 	$result = array();
 	for ($i=0; $i<ANZAHL_BLOCKS; $i++) {
 		$slotAnzahl = getBlockAnzahlSlots($i);
@@ -20,12 +17,27 @@ function dh_holeBelegungBitmap($jahr, $monat, $tag) {
 		for ($j=0; $j<$slotAnzahl; $j++) {
 			array_push($slots, array(
 				'zeit' => $zeit,
-				'belegt' => rand() % 2,
+				'belegt' => false,
 			));
 			$zeit = zt_addiereMinuten($zeit, SLOT_DAUER);
 		}
 		array_push($result, $slots);
 	}
+
+	// mit Daten aus der Datenbank befüllen
+	$rows = db_holeBuchungenFuerTag($jahr, $monat, $tag, array('blocknummer', 'slotnummer'));
+	foreach ($rows as $row) {
+		$blocknummer = $row['blocknummer'];
+		$slotnummer = $row['slotnummer'];
+		if (!array_key_exists($blocknummer, $result)) {
+			continue;
+		}
+		if (!array_key_exists($slotnummer, $result[$blocknummer])) {
+			continue;
+		}
+		$result[$blocknummer][$slotnummer]['belegt'] = true;
+	}
+
 	return $result;
 }
 

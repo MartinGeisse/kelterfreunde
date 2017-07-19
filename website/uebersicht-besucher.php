@@ -25,7 +25,7 @@ $buchenBasisUrl = 'buchen.php?jahr=' . $jahr . '&monat=' . $monat . '&tag=' . $t
 			<li>
 				<?= zt_zeitpunktText($slot['zeit']) ?> - <?= zt_zeitpunktText(zt_addiereMinuten($slot['zeit'], SLOT_DAUER)) ?>:
 				<?= $slot['belegt'] ? 'belegt' : '---' ?>
-				<?php if (!$slot['belegt']): ?>&nbsp;&nbsp;&nbsp;<a href="buchen.php">buchen</a><?php endif; ?>
+				<?php if (!$slot['belegt']): ?>&nbsp;&nbsp;&nbsp;<a href="<?= $buchenUrl ?>">buchen</a><?php endif; ?>
 			</li>
 		</ul>
 	<?php endforeach; ?>
