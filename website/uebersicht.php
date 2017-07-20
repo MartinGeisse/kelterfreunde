@@ -14,59 +14,93 @@ require('_intro.php');
 $montag = getQuerystringMontag(true);
 $sonntag = dt_addiereTage($montag, 6);
 
+// TODO alle Tage auf einmal laden -- schneller
+$eingeloggt = au_checkCookie();
+$belegungTage = array();
+$datum = $montag;
+for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
+	if ($eingeloggt) {
+		$belegungBlocks = dh_holeBelegungVollstaendig($datum['jahr'], $datum['monat'], $datum['tag']);
+	} else {
+		$belegungBlocks = dh_holeBelegungBitmap($datum['jahr'], $datum['monat'], $datum['tag']);
+	}
+	array_push($belegungTage, $belegungBlocks);
+	$datum = dt_addiereTage($datum, 1);
+}
+
+// Darstellung
 ?>
+
 <h1>
 	Keltertermine <?= $montag['tag'] ?>.<?= $montag['monat'] ?>.<?= $montag['jahr'] ?> - <?= $sonntag['tag'] ?>.<?= $sonntag['monat'] ?>.<?= $sonntag['jahr'] ?>
-	&emsp;
-	<span style="font-size: smaller">
-		<?php $datum = dt_addiereTage($montag, -7); ?>
-		<a class="glyphicon glyphicon-chevron-left" href="uebersicht.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"></a>
-		<?php $datum = dt_addiereTage($montag, 7); ?>
-		<a class="glyphicon glyphicon-chevron-right" href="uebersicht.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"></a>
+	<span class="hidden-print">
+		&emsp;
+		<span style="font-size: smaller">
+			<?php $datum = dt_addiereTage($montag, -7); ?>
+			<a class="glyphicon glyphicon-chevron-left" href="uebersicht.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"></a>
+			<?php $datum = dt_addiereTage($montag, 7); ?>
+			<a class="glyphicon glyphicon-chevron-right" href="uebersicht.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"></a>
+		</span>
 	</span>
 </h1>
 
-<?php $datum = $montag; ?>
-<?php for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++): ?>
-	<?php
-		$eingeloggt = au_checkCookie();
-		if ($eingeloggt) {
-			$belegung = dh_holeBelegungVollstaendig($datum['jahr'], $datum['monat'], $datum['tag']);
-		} else {
-			$belegung = dh_holeBelegungBitmap($datum['jahr'], $datum['monat'], $datum['tag']);
-		}
-		$buchenBasisUrl = 'buchen.php?jahr=' . $datum['jahr'] . '&monat=' . $datum['monat'] . '&tag=' . $datum['tag'];
-	?>
-	<h2><?= dt_getWochentagNameFuerNummer($wochentagnummer) ?>, <?= $datum['tag'] ?>.<?= $datum['monat'] ?>.<?= $datum['jahr'] ?></h2>
-	<?php foreach ($belegung as $blocknummer => $block): ?>
-		<br />
-		<?php foreach ($block as $slotnummer => $slot): ?>
-			<?php $buchenUrl = $buchenBasisUrl . '&blocknummer=' . $blocknummer . '&slotnummer=' . $slotnummer; ?>
-			<ul>
-				<li>
-					<?= zt_zeitpunktText($slot['zeit']) ?> - <?= zt_zeitpunktText(zt_addiereMinuten($slot['zeit'], SLOT_DAUER)) ?>:
-					<?php
+<table class="table table-striped">
+	<tr>
+		<th></th>
+		<?php
+			$datum = $montag;
+			for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
+				$datum = dt_addiereTage($datum, 1);
+				echo '<th>', dt_getWochentagAbkuerzungFuerNummer($wochentagnummer), ' ', $datum['tag'], '.', $datum['monat'], '</th>', "\n";
+			}
+		?>
+	</tr>
+	<?php for ($blocknummer = 0; $blocknummer < ANZAHL_BLOCKS; $blocknummer++): ?>
+		<?php $anzahlSlots = getBlockAnzahlSlots($blocknummer); ?>
+		<?php for ($slotnummer = 0; $slotnummer < $anzahlSlots; $slotnummer++): ?>
+			<tr>
+				<?php
+					$datum = $montag;
+					for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
+						$slot = $belegungTage[$wochentagnummer - 1][$blocknummer][$slotnummer];
+						$buchenUrl = 'buchen.php?jahr=' . $datum['jahr'] . '&monat=' . $datum['monat'] . '&tag=' . $datum['tag'] . '&blocknummer=' . $blocknummer . '&slotnummer=' . $slotnummer;
+						if ($wochentagnummer == 1) {
+							// echo '<td>', zt_zeitpunktText($slot['zeit']), ' - ', zt_zeitpunktText(zt_addiereMinuten($slot['zeit'], SLOT_DAUER)), '</td>', "\n";
+							echo '<td>', zt_zeitpunktText($slot['zeit']), '</td>', "\n";
+						}
+						echo '<td>';
 						if ($slot['belegt']) {
 							if ($eingeloggt) {
-								echo $slot['name'] . ', ' . $slot['telefonnummer'];
+								echo '<span class="print-line">', $slot['name'], '</span>';
+								echo '<span class="hidden-print">, </span>';
+								echo '<span class="print-line">', $slot['telefonnummer'], '</span>';
 							} else {
 								echo 'belegt';
 							}
 						} else {
-							echo '---';
-							if (!$eingeloggt) {
-								echo '&nbsp;&nbsp;&nbsp;<a href="<?= $buchenUrl ?>">buchen</a>';
+							if ($eingeloggt) {
+								echo '<span class="hidden-print">---</span>';
+								echo '<span class="visible-print-block">&nbsp;</span>';
+								echo '<span class="visible-print-block">&nbsp;</span>';
+							} else {
+								echo '<a href="', $buchenUrl, '" class="hidden-print">buchen</a>';
 							}
 						}
-					?>
-				</li>
-			</ul>
-		<?php endforeach; ?>
-	<?php endforeach; ?>
-	<?php $datum = dt_addiereTage($datum, 1); ?>
-<?php endfor; ?>
+						echo '</td>', "\n";
+						$datum = dt_addiereTage($datum, 1);
+					}
+				?>
+			</tr>
+		<?php endfor; ?>
+	<?php endfor; ?>
+</table>
 
-<a href="login.php?<?= $_SERVER['QUERY_STRING'] ?>">login</a><br>
-<a href="logout.php?<?= $_SERVER['QUERY_STRING'] ?>">logout</a><br>
+<div class="hidden-print">
+	<?php if ($eingeloggt): ?>
+		<a href="logout.php?<?= $_SERVER['QUERY_STRING'] ?>">logout</a><br>
+	<?php else: ?>
+		<a href="login.php?<?= $_SERVER['QUERY_STRING'] ?>">login</a><br>
+	<?php endif; ?>
+</div>
 
 <?php require('_outro.php');

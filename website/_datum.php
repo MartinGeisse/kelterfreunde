@@ -97,3 +97,19 @@ function dt_getWochentagNameFuerNummer($wochentagnummer) {
 	);
 	return $namen[$wochentagnummer - 1];
 }
+
+function dt_getWochentagAbkuerzungFuerNummer($wochentagnummer) {
+	if ($wochentagnummer < 1 || $wochentagnummer > 7) {
+		die('ungültige Wochentagnummer: ' . $wochentagnummer);
+	}
+	$namen = array(
+		'Mo',
+		'Di',
+		'Mi',
+		'Do',
+		'Fr',
+		'Sa',
+		'So',
+	);
+	return $namen[$wochentagnummer - 1];
+}

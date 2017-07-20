@@ -100,19 +100,19 @@ require('_intro.php');
 <form class="form" method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
 <?php /*
 	<?php printValidationError('vonSlot'); ?>
-	<div>von slot # <input type="text" name="von" value="<?= htmlspecialchars($fields['vonSlot']) ?>"></div>
+	<div>von slot # <input type="text" name="von" value="<?= htmlspecialchars($formFields['vonSlot']) ?>"></div>
 	<?php printValidationError('bisSlot'); ?>
-	<div>bis slot # <input type="text" name="bis" value="<?= htmlspecialchars($fields['bisSlot']) ?>"></div>
+	<div>bis slot # <input type="text" name="bis" value="<?= htmlspecialchars($formFields['bisSlot']) ?>"></div>
 */ ?>
 
 	<div><label for="name">Name</label></div>
 	<?php printValidationError('name'); ?>
-	<div><input class="form-control" type="text" name="name" value="<?= htmlspecialchars($fields['name']) ?>"></div>
+	<div><input class="form-control" type="text" name="name" value="<?= htmlspecialchars($formFields['name']) ?>"></div>
 	<br>
 
 	<div><label for="telefonnummer">Telefon</label></div>
 	<?php printValidationError('telefonnummer'); ?>
-	<div><input class="form-control" type="text" name="telefonnummer" value="<?= htmlspecialchars($fields['telefonnummer']) ?>"></div>
+	<div><input class="form-control" type="text" name="telefonnummer" value="<?= htmlspecialchars($formFields['telefonnummer']) ?>"></div>
 	<br>
 	
 	<div><input class="btn btn-primary" type="submit" value="buchen"> oder <a href="uebersicht.php">zurück</a></div>

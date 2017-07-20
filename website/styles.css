@@ -10,3 +10,13 @@ body {
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 }
+
+.print-line {
+	display: inline;
+}
+
+@media print { 
+	.print-line {
+		display: block;
+	}
+}
