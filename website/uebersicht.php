@@ -44,14 +44,14 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 	</span>
 </h1>
 
-<table class="table table-striped">
+<table class="table table-striped termintabelle">
 	<tr>
 		<th></th>
 		<?php
 			$datum = $montag;
 			for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 				$datum = dt_addiereTage($datum, 1);
-				echo '<th>', dt_getWochentagAbkuerzungFuerNummer($wochentagnummer), ' ', $datum['tag'], '.', $datum['monat'], '</th>', "\n";
+				echo '<th>', dt_getWochentagAbkuerzungFuerNummer($wochentagnummer), '&nbsp;', $datum['tag'], '.', $datum['monat'], '</th>', "\n";
 			}
 		?>
 	</tr>
@@ -68,25 +68,27 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 							// echo '<td>', zt_zeitpunktText($slot['zeit']), ' - ', zt_zeitpunktText(zt_addiereMinuten($slot['zeit'], SLOT_DAUER)), '</td>', "\n";
 							echo '<td>', zt_zeitpunktText($slot['zeit']), '</td>', "\n";
 						}
-						echo '<td>';
 						if ($slot['belegt']) {
+							echo '<td class="belegt">';
 							if ($eingeloggt) {
 								echo '<span class="print-line">', $slot['name'], '</span>';
-								echo '<span class="hidden-print">, </span>';
+								echo '<br class="hidden-print">';
 								echo '<span class="print-line">', $slot['telefonnummer'], '</span>';
 							} else {
 								echo 'belegt';
 							}
+							echo '</td>', "\n";
 						} else {
+							echo '<td class="frei">';
 							if ($eingeloggt) {
-								echo '<span class="hidden-print">---</span>';
+								echo '<span class="hidden-print">---</span><br class="hidden-print"><span class="hidden-print">&nbsp;</span>';
 								echo '<span class="visible-print-block">&nbsp;</span>';
 								echo '<span class="visible-print-block">&nbsp;</span>';
 							} else {
 								echo '<a href="', $buchenUrl, '" class="hidden-print">buchen</a>';
 							}
+							echo '</td>', "\n";
 						}
-						echo '</td>', "\n";
 						$datum = dt_addiereTage($datum, 1);
 					}
 				?>
