@@ -15,10 +15,13 @@ function db_holeBuchungenFuerTag($jahr, $monat, $tag, $felder) {
 	global $databaseConnection;
 	$query = 'SELECT `' . implode('`, `', $felder) . '` FROM `buchungen` WHERE `jahr` = ? AND `monat` = ? AND `tag` = ?';
 	$statement = $databaseConnection->prepare($query);
+	if (!$statement) {
+		die('Datenbankabfrage fehlgeschlagen (Schritt 1)');
+	}
 	$statement->bind_param('iii', $jahr, $monat, $tag);
 	$statement->execute();
 	if (!empty($statement->error_list)) {
-		die('Datenbankabfrage fehlgeschlagen');
+		die('Datenbankabfrage fehlgeschlagen (Schritt 2)');
 	}
 	$resultSet = $statement->get_result();
 	$resultRows = array();
@@ -33,6 +36,9 @@ function db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $nam
 	global $databaseConnection;
 	$query = 'INSERT INTO `buchungen` (`jahr`, `monat`, `tag`, `blocknummer`, `slotnummer`, `name`, `telefonnummer`) VALUES (?, ?, ?, ?, ?, ?, ?)';
 	$statement = $databaseConnection->prepare($query);
+	if (!$statement) {
+		die('Datenbankänderung fehlgeschlagen (Schritt 1)');
+	}
 	$statement->bind_param('iiiiiss', $jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer);
 	$statement->execute();
 	$errors = $statement->error_list;
@@ -43,7 +49,7 @@ function db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $nam
 	}
 	if (!empty($errors)) {
 		// other errors
-		die('Datenbankänderung fehlgeschlagen');
+		die('Datenbankänderung fehlgeschlagen (Schritt 2)');
 	}
 	return true;
 }
