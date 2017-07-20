@@ -23,11 +23,21 @@ function db_holeBuchungenFuerTag($jahr, $monat, $tag, $felder) {
 	if (!empty($statement->error_list)) {
 		die('Datenbankabfrage fehlgeschlagen (Schritt 2)');
 	}
-	$resultSet = $statement->get_result();
 	$resultRows = array();
-	while ($row = $resultSet->fetch_array(MYSQLI_ASSOC)) {
-		array_push($resultRows, $row);
+	$currentRow = array();
+	$currentRowIndexed = array();
+	$metadata = $statement->result_metadata(); 
+	while ($fieldMeta = $metadata->fetch_field()) { 
+		$currentRowIndexed[] = &$currentRow[$fieldMeta->name]; 
 	}
+	call_user_func_array(array($statement, 'bind_result'), $currentRowIndexed); 
+	while ($statement->fetch()) {
+		$newRow = array();
+		foreach ($currentRow as $key => $value) { 
+			$newRow[$key] = $value;
+		}
+		array_push($resultRows, $newRow);
+	} 
 	$statement->close();
 	return $resultRows;
 }
