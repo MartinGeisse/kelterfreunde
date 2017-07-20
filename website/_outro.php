@@ -8,5 +8,8 @@ if (!empty($databaseConnection)) {
 }
 ?>
 </div>
+<script type="text/javascript">
+	window.parent.postMessage('iframe-embedding:' + document.body.scrollHeight,'*');
+</script>
 </body>
 </html>
