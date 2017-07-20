@@ -1,5 +1,2 @@
 
-- Kalender
-- Datum für Übersicht (beide) parametrisiert
-- Übersicht (Verein) nur für den Verein zugänglich
 - Live-Deploy
