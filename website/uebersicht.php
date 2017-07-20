@@ -32,17 +32,23 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 ?>
 
 <h1>
-	Keltertermine <?= $montag['tag'] ?>.<?= $montag['monat'] ?>.<?= $montag['jahr'] ?> - <?= $sonntag['tag'] ?>.<?= $sonntag['monat'] ?>.<?= $sonntag['jahr'] ?>
-	<span class="hidden-print">
-		&emsp;
+	<div style="float: left; margin-right: 30px; ">
+		Keltertermine
+		<span class="subheadline">
+			<?= $montag['tag'] ?>.<?= $montag['monat'] ?>.<?= $montag['jahr'] ?> - <?= $sonntag['tag'] ?>.<?= $sonntag['monat'] ?>.<?= $sonntag['jahr'] ?>
+		</span>
+	</div>
+	<div class="hidden-print" style="float: left">
 		<span style="font-size: smaller">
 			<?php $datum = dt_addiereTage($montag, -7); ?>
 			<a class="glyphicon glyphicon-chevron-left" href="uebersicht.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"></a>
 			<?php $datum = dt_addiereTage($montag, 7); ?>
 			<a class="glyphicon glyphicon-chevron-right" href="uebersicht.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"></a>
 		</span>
-	</span>
+	</div>
+	&nbsp;
 </h1>
+<br>
 
 <table class="table table-striped termintabelle">
 	<tr>
