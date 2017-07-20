@@ -9,7 +9,7 @@ if (!empty($databaseConnection)) {
 ?>
 </div>
 <script type="text/javascript">
-	window.parent.postMessage('iframe-embedding:' + document.body.scrollHeight,'*');
+	window.parent.postMessage('iframe-embedding:' + document.getElementById('content-container').scrollHeight,'*');
 </script>
 </body>
 </html>

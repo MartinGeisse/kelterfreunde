@@ -21,4 +21,4 @@ header("Connection: close");
 	<script type="text/javascript" src="bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container">
+<div class="container" id="content-container">
