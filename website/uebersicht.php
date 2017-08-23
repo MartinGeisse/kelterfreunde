@@ -86,7 +86,7 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 						} else {
 							echo '<td class="frei">';
 							if ($eingeloggt) {
-								echo '<span class="hidden-print">---</span><br class="hidden-print"><span class="hidden-print">&nbsp;</span>';
+								echo '<a href="', $buchenUrl, '" class="hidden-print">---</a><br class="hidden-print"><span class="hidden-print">&nbsp;</span>';
 								echo '<span class="visible-print-block">&nbsp;</span>';
 								echo '<span class="visible-print-block">&nbsp;</span>';
 							} else {
