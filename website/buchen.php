@@ -115,7 +115,7 @@ require('_intro.php');
 	<div><input class="form-control" type="text" name="telefonnummer" value="<?= htmlspecialchars($formFields['telefonnummer']) ?>"></div>
 	<br>
 	
-	<div><input class="btn btn-primary" type="submit" value="buchen"> oder <a href="uebersicht.php">zurück</a></div>
+	<div><input class="btn btn-primary" type="submit" value="buchen"> oder <a href="uebersicht.php?jahr=<?= $jahr ?>&monat=<?= $monat ?>&tag=<?= $tag ?>">zurück</a></div>
 </form>
 
 <?php require('_outro.php');
