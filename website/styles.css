@@ -34,8 +34,7 @@ td.belegt {
 }
 
 @media (max-width: 767px) {
-	.subheadline {
-		display: block;
-		font-size: 0.6em;
+	.headline {
+		font-size: 1.8em;
 	}
 }

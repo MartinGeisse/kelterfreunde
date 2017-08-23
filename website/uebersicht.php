@@ -31,14 +31,11 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 // Darstellung
 ?>
 
-<h1>
-	<div style="float: left; margin-right: 30px; ">
+<h1 class="headline">
+	<div style="float: left;">
 		Keltertermine
-		<span class="subheadline">
-			<?= $montag['tag'] ?>.<?= $montag['monat'] ?>.<?= $montag['jahr'] ?> - <?= $sonntag['tag'] ?>.<?= $sonntag['monat'] ?>.<?= $sonntag['jahr'] ?>
-		</span>
 	</div>
-	<div class="hidden-print" style="float: left">
+	<div class="hidden-print" style="float: right">
 		<span style="font-size: smaller">
 			<?php $datum = dt_addiereTage($montag, -7); ?>
 			<a class="glyphicon glyphicon-chevron-left" href="uebersicht.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"></a>
@@ -46,7 +43,9 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 			<a class="glyphicon glyphicon-chevron-right" href="uebersicht.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"></a>
 		</span>
 	</div>
-	&nbsp;
+	<div style="text-align: center">
+		<?= $montag['tag'] ?>.<?= $montag['monat'] ?>.<?= $montag['jahr'] ?> - <?= $sonntag['tag'] ?>.<?= $sonntag['monat'] ?>.<?= $sonntag['jahr'] ?>
+	</div>
 </h1>
 <br>
 
