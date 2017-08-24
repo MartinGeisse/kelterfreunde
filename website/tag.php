@@ -26,8 +26,11 @@ $belegungBlocks = dh_holeBelegungVollstaendig($datum['jahr'], $datum['monat'], $
 	Keltertermine <?= $datum['tag'] ?>.<?= $datum['monat'] ?>.<?= $datum['jahr'] ?>
 </h1>
 <br>
-<a href="uebersicht.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"><span class="glyphicon glyphicon-chevron-left"></span> zurück zur Woche</a>
-<br><br><br>
+<div class="hidden-print">
+	<a href="uebersicht.php?jahr=<?= $datum['jahr'] ?>&monat=<?= $datum['monat'] ?>&tag=<?= $datum['tag'] ?>"><span class="glyphicon glyphicon-chevron-left"></span> zurück zur Woche</a>
+	<br>
+</div>
+<br><br>
 
 <table class="table table-striped" style="width: auto">
 	<?php for ($blocknummer = 0; $blocknummer < ANZAHL_BLOCKS; $blocknummer++): ?>
