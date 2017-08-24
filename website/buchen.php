@@ -26,6 +26,7 @@ if (!dt_datumValide($datum)) {
 }
 $blocknummer = getQuerystringIntParameter('blocknummer', 0, ANZAHL_BLOCKS - 1);
 $slotnummer = getQuerystringIntParameter('slotnummer', 0, getBlockAnzahlSlots($blocknummer) - 1);
+$zurueckEinzeltag = !empty($_GET['zurueckInfo']);
 
 //
 // lesbare Zeiten berechnen
@@ -81,7 +82,7 @@ if (handleForm()) {
 	if (empty($validationErrors)) {
 		$success = db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer);
 		if ($success) {
-			header('Location: uebersicht.php?jahr='.$jahr.'&monat='.$monat.'&tag='.$tag, true, 302);
+			header('Location: '.($zurueckEinzeltag ? 'tag' : 'uebersicht').'.php?jahr='.$jahr.'&monat='.$monat.'&tag='.$tag, true, 302);
 		} else {
 			header('Location: schon-gebucht.php', true, 302);
 		}
@@ -115,7 +116,7 @@ require('_intro.php');
 	<div><input class="form-control" type="text" name="telefonnummer" value="<?= htmlspecialchars($formFields['telefonnummer']) ?>"></div>
 	<br>
 	
-	<div><input class="btn btn-primary" type="submit" value="buchen"> oder <a href="uebersicht.php?jahr=<?= $jahr ?>&monat=<?= $monat ?>&tag=<?= $tag ?>">zurück</a></div>
+	<div><input class="btn btn-primary" type="submit" value="buchen"> oder <a href="<?= ($zurueckEinzeltag ? 'tag' : 'uebersicht') ?>.php?jahr=<?= $jahr ?>&monat=<?= $monat ?>&tag=<?= $tag ?>">zurück</a></div>
 </form>
 
 <?php require('_outro.php');

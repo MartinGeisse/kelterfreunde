@@ -55,7 +55,8 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 		<?php
 			$datum = $montag;
 			for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
-				echo '<th>', dt_getWochentagAbkuerzungFuerNummer($wochentagnummer), '&nbsp;', $datum['tag'], '.', $datum['monat'], '</th>', "\n";
+				echo '<th><a href="tag.php?jahr=', $datum['jahr'], '&monat=', $datum['monat'], '&tag=', $datum['tag'], '">',
+					dt_getWochentagAbkuerzungFuerNummer($wochentagnummer), '&nbsp;', $datum['tag'], '.', $datum['monat'], '</a></th>', "\n";
 				$datum = dt_addiereTage($datum, 1);
 			}
 		?>
