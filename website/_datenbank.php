@@ -11,6 +11,21 @@ if ($databaseConnection->connect_error) {
 	die('Verbindung zur Datenbank fehlgeschlagen');
 }
 
+function db_beginTransaction() {
+	global $databaseConnection;
+	$databaseConnection->begin();
+}
+
+function db_commitTransaction() {
+	global $databaseConnection;
+	$databaseConnection->commit();
+}
+
+function db_rollbackTransaction() {
+	global $databaseConnection;
+	$databaseConnection->rollback();
+}
+
 function db_holeBuchungenFuerTag($jahr, $monat, $tag, $felder) {
 	global $databaseConnection;
 	$query = 'SELECT `' . implode('`, `', $felder) . '` FROM `buchungen` WHERE `jahr` = ? AND `monat` = ? AND `tag` = ?';
@@ -42,14 +57,14 @@ function db_holeBuchungenFuerTag($jahr, $monat, $tag, $felder) {
 	return $resultRows;
 }
 
-function db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer) {
+function db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer, $zentner) {
 	global $databaseConnection;
-	$query = 'INSERT INTO `buchungen` (`jahr`, `monat`, `tag`, `blocknummer`, `slotnummer`, `name`, `telefonnummer`) VALUES (?, ?, ?, ?, ?, ?, ?)';
+	$query = 'INSERT INTO `buchungen` (`jahr`, `monat`, `tag`, `blocknummer`, `slotnummer`, `name`, `telefonnummer`, `zentner`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 	$statement = $databaseConnection->prepare($query);
 	if (!$statement) {
 		die('Datenbankänderung fehlgeschlagen (Schritt 1)');
 	}
-	$statement->bind_param('iiiiiss', $jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer);
+	$statement->bind_param('iiiiiss', $jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer, $zentner);
 	$statement->execute();
 	$errors = $statement->error_list;
 	$statement->close();
@@ -63,3 +78,5 @@ function db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $nam
 	}
 	return true;
 }
+
+// TODO transaction support

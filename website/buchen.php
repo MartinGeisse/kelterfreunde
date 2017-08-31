@@ -41,6 +41,7 @@ $slotEndezeit = zt_addiereMinuten($slotStartzeit, SLOT_DAUER);
 $formFields = array(
 	'name' => '',
 	'telefonnummer' => '',
+	'zentner' => '',
 );
 if (handleForm()) {
 
@@ -68,19 +69,40 @@ if (handleForm()) {
 	// Telefonnummer
 	if (empty($formFields['telefonnummer']) || empty(trim($formFields['telefonnummer']))) {
 		$validationErrors['telefonnummer'] = 'Bitte geben Sie hier Ihre Telefonnummer ein.';
-	}
-	$telefonnummer = trim($formFields['telefonnummer']);
-	$telefonnummer = strtr($telefonnummer, '/-()', '    ');
-	$telefonnummer = str_replace(' ', '', $telefonnummer);
-	if (!preg_match('/^[0-9]*$/', $telefonnummer)) {
-		$telefonnummer = strtr($telefonnummer, '1234567890', '          ');
+	} else {
+		$telefonnummer = trim($formFields['telefonnummer']);
+		$telefonnummer = strtr($telefonnummer, '/-()', '    ');
 		$telefonnummer = str_replace(' ', '', $telefonnummer);
-		$validationErrors['telefonnummer'] = 'Die Telefonnummer enthält ungültige Zeichen: ' . substr($telefonnummer, 0, 1);
+		if (!preg_match('/^[0-9]*$/', $telefonnummer)) {
+			$telefonnummer = strtr($telefonnummer, '1234567890', '          ');
+			$telefonnummer = str_replace(' ', '', $telefonnummer);
+			$validationErrors['telefonnummer'] = 'Die Telefonnummer enthält ungültige Zeichen: ' . substr($telefonnummer, 0, 1);
+		}
+	}
+
+	// Zentner Äpfel
+	if (empty($formFields['zentner']) || empty(trim($formFields['zentner']))) {
+		$validationErrors['zentner'] = 'Bitte geben Sie hier an, wieviele Zentner Äpfel gekeltert werden sollen.';
+	} else {
+		$zentnerText = trim($formFields['zentner']);
+		$zentner = (float)$zentnerText;
+		if ($zentnerText != (string)$zentner) {
+			$validationErrors['zentner'] = 'Bitte geben Sie nur eine Zahl ein.';
+		} else {
+			$zentner = ceil($zentner);
+			if ($zentner < 1) {
+				$validationErrors['zentner'] = 'Bitte geben Sie eine positive Zahl ein.';
+			}
+		}
 	}
 
 	// weitere Verarbeitung
 	if (empty($validationErrors)) {
-		$success = db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer);
+		$anzahlSlots = round($zentner / 3);
+		if ($anzahlSlots < 1) {
+			$anzahlSlots = 1;
+		}
+		$success = db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $anzahlSlots, $name, $telefonnummer, $zentner);
 		if ($success) {
 			header('Location: '.($zurueckEinzeltag ? 'tag' : 'uebersicht').'.php?jahr='.$jahr.'&monat='.$monat.'&tag='.$tag, true, 302);
 		} else {
@@ -99,12 +121,6 @@ require('_intro.php');
 <h1>Termin Buchen: <?= $tag ?>.<?= $monat ?>.<?= $jahr ?> <?= zt_zeitpunktText($slotStartzeit) ?> - <?= zt_zeitpunktText($slotEndezeit) ?></h1>
 
 <form class="form" method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
-<?php /*
-	<?php printValidationError('vonSlot'); ?>
-	<div>von slot # <input type="text" name="von" value="<?= htmlspecialchars($formFields['vonSlot']) ?>"></div>
-	<?php printValidationError('bisSlot'); ?>
-	<div>bis slot # <input type="text" name="bis" value="<?= htmlspecialchars($formFields['bisSlot']) ?>"></div>
-*/ ?>
 
 	<div><label for="name">Name</label></div>
 	<?php printValidationError('name'); ?>
@@ -114,6 +130,11 @@ require('_intro.php');
 	<div><label for="telefonnummer">Telefon</label></div>
 	<?php printValidationError('telefonnummer'); ?>
 	<div><input class="form-control" type="text" name="telefonnummer" value="<?= htmlspecialchars($formFields['telefonnummer']) ?>"></div>
+	<br>
+
+	<div><label for="zentner">Zentner Äpfel</label></div>
+	<?php printValidationError('zentner'); ?>
+	<div><input class="form-control" type="text" name="zentner" value="<?= htmlspecialchars($formFields['zentner']) ?>"></div>
 	<br>
 	
 	<div><input class="btn btn-primary" type="submit" value="buchen"> oder <a href="<?= ($zurueckEinzeltag ? 'tag' : 'uebersicht') ?>.php?jahr=<?= $jahr ?>&monat=<?= $monat ?>&tag=<?= $tag ?>">zurück</a></div>
