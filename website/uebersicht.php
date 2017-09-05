@@ -129,9 +129,10 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 										echo '<div>&nbsp;&nbsp;&nbsp;| |</div>';
 										echo '<div>&nbsp;</div>';
 									} else {
+										$loeschenUrl = 'loeschen.php?jahr=' . $datum['jahr'] . '&monat=' . $datum['monat'] . '&tag=' . $datum['tag'] . '&blocknummer=' . $blocknummer . '&slotnummer=' . $slotnummer;
 										echo '<div>', $slot['name'], '</div>';
 										echo '<div>', $slot['telefonnummer'], '</div>';
-										echo '<div>', $slot['zentner'], ' Ztr.</div>';
+										echo '<div><div style="float: right"><a href="', $loeschenUrl, '">X</a></div>', $slot['zentner'], ' Ztr.</div>';
 									}
 								} else {
 									echo 'belegt';

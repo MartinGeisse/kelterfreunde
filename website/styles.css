@@ -57,3 +57,7 @@ td.belegt {
 		content: none !important;
 	}
 }
+
+.eigenschaften-tabelle td {
+    padding: 2px 30px 2px 0px;
+}
