@@ -81,3 +81,39 @@ function db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $nam
 	}
 	return true;
 }
+
+function db_setzeVariable($name, $wert) {
+	global $databaseConnection;
+	$query = 'INSERT INTO `variablen` (`name`, `wert`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `wert` = ?';
+	$statement = $databaseConnection->prepare($query);
+	if (!$statement) {
+		die('Datenbankänderung fehlgeschlagen (Schritt 1)');
+	}
+	$statement->bind_param('sss', $name, $wert, $wert);
+	$statement->execute();
+	$errors = $statement->error_list;
+	$statement->close();
+	if (!empty($errors)) {
+		die('Datenbankänderung fehlgeschlagen (Schritt 2)');
+	}
+	return true;
+}
+
+function db_holeVariable($name) {
+	global $databaseConnection;
+	$query = 'SELECT `wert` FROM `variablen` WHERE `name` = ?';
+	$statement = $databaseConnection->prepare($query);
+	if (!$statement) {
+		die('Datenbankabfrage fehlgeschlagen (Schritt 1)');
+	}
+	$statement->bind_param('s', $name);
+	$statement->execute();
+	if (!empty($statement->error_list)) {
+		die('Datenbankabfrage fehlgeschlagen (Schritt 2)');
+	}
+	$wert = null;
+	$statement->bind_result($wert);
+	$statement->fetch();
+	$statement->close();
+	return (string)$wert;
+}

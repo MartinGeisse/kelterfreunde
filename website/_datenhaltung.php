@@ -72,3 +72,11 @@ function dh_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummerStart,
 	db_commitTransaction();
 	return true;
 }
+
+function dh_setzeVariable($name, $wert) {
+	db_setzeVariable($name, $wert);
+}
+
+function dh_holeVariable($name) {
+	return db_holeVariable($name);
+}
