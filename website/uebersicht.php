@@ -5,6 +5,7 @@ require_once('_konstanten.php');
 require_once('_zeit.php');
 require_once('_datum.php');
 require_once('_querystring.php');
+require_once('_form.php');
 require_once('_responsive.php');
 require_once('_datenbank.php');
 require_once('_datenhaltung.php');
@@ -13,9 +14,22 @@ require('_intro.php');
 
 $montag = getQuerystringMontag(true);
 $sonntag = dt_addiereTage($montag, 6);
-
-// TODO alle Tage auf einmal laden -- schneller
 $eingeloggt = au_checkCookie();
+
+// Sperrfunktion
+if ($eingeloggt) {
+	$formFields = array('sperre' => null);
+	if (handleForm()) {
+		if (isset($formFields['sperre'])) {
+			dh_setzeVariable('sperre', !empty($formFields['sperre']));
+			header('Location: uebersicht.php?jahr='.$montag['jahr'].'&monat='.$montag['monat'].'&tag='.$montag['tag'], true, 302);
+			die();
+		}
+	}
+}
+$sperre = dh_holeVariable('sperre');
+
+// Daten laden
 $belegungTage = array();
 $datum = $montag;
 for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
@@ -52,6 +66,16 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 <br class="visible-print-block">
 <br class="visible-print-block">
 <br class="visible-print-block">
+<?php if ($eingeloggt): ?>
+	<div class="alert <?= $sperre ? 'alert-danger' : 'alert-success' ?>">
+		<form method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>" style="float: right">
+			<input type="hidden" name="sperre" value="<?= (int)!$sperre ?>">
+			<input type="submit" value="<?= $sperre ? 'Jetzt entsperren' : 'Jetzt sperren' ?>">
+		</form>
+		<span class="glyphicon glyphicon-ok-circle"></span>
+		Buchungen durch Besucher sind <?= $sperre ? '' : 'nicht' ?> gesperrt.
+	</div>
+<?php endif; ?>
 
 <table class="table table-striped termintabelle">
 	<tr>
