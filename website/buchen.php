@@ -98,17 +98,40 @@ if (handleForm()) {
 
 	// weitere Verarbeitung
 	if (empty($validationErrors)) {
+
+		// die Anzahl an Slots für die Anzahl Zentner berechnen
 		$anzahlSlots = round($zentner / 3);
 		if ($anzahlSlots < 1) {
 			$anzahlSlots = 1;
 		}
-		$success = dh_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $anzahlSlots, $name, $telefonnummer, $zentner);
-		if ($success) {
-			header('Location: '.($zurueckEinzeltag ? 'tag' : 'uebersicht').'.php?jahr='.$jahr.'&monat='.$monat.'&tag='.$tag, true, 302);
+
+		// Prüfen, ob die Termine schon belegt sind. Diese Prüfung ist nicht Teil der Transaktion, da uns das ohne ein definiertes 
+		// Isolationslevel nicht helfen würde. Eine Parallele Buchung wird stattdessen über einen Unique Key abgefangen.
+		$belegung = dh_holeBelegungBitmap($jahr, $monat, $tag);
+		$slotsFuerDiesenBlock = $belegung[$blocknummer];
+		if ($slotnummer + $anzahlSlots > count($slotsFuerDiesenBlock)) {
+			if ($blocknummer == ANZAHL_BLOCKS - 1) {
+				$validationErrors['zentner'] = 'Diese Menge ist zu groß für den späten Termin kurz vor Tagesende.';
+			} else {
+				$validationErrors['zentner'] = 'Die Zeit für diese Menge überschneidet sich mit der Pause.';
+			}
 		} else {
-			header('Location: schon-gebucht.php', true, 302);
+			for ($i = 0; $i < $anzahlSlots; $i++) {
+				if ($slotsFuerDiesenBlock[$slotnummer + $i]['belegt']) {
+					$validationErrors['zentner'] = 'Die Zeit für diese Menge überschneidet sich mit einem anderen Termin.';
+				}
+			}
+			if (empty($validationErrors)) {
+				$success = dh_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $anzahlSlots, $name, $telefonnummer, $zentner);
+				if ($success) {
+					header('Location: '.($zurueckEinzeltag ? 'tag' : 'uebersicht').'.php?jahr='.$jahr.'&monat='.$monat.'&tag='.$tag, true, 302);
+				} else {
+					header('Location: schon-gebucht.php', true, 302);
+				}
+				die();
+			}
 		}
-		die();
+
 	}
 
 }

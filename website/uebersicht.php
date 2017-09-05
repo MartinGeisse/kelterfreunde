@@ -66,6 +66,11 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 		?>
 	</tr>
 	<?php for ($blocknummer = 0; $blocknummer < ANZAHL_BLOCKS; $blocknummer++): ?>
+		<?php
+			if ($blocknummer > 0) {
+				echo '<tr style="background-color: #aaa"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>', "\n";
+			}
+		?>
 		<?php $anzahlSlots = getBlockAnzahlSlots($blocknummer); ?>
 		<?php for ($slotnummer = 0; $slotnummer < $anzahlSlots; $slotnummer++): ?>
 			<tr>
