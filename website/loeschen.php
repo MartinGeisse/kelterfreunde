@@ -5,6 +5,7 @@ require_once('_konstanten.php');
 require_once('_zeit.php');
 require_once('_datum.php');
 require_once('_querystring.php');
+require_once('_form.php');
 require_once('_responsive.php');
 require_once('_datenbank.php');
 require_once('_datenhaltung.php');
@@ -51,6 +52,13 @@ $blockStartzeit = getBlockStartzeit($blocknummer);
 $startzeit = zt_addiereMinuten($blockStartzeit, $slotnummer * SLOT_DAUER);
 $endezeit = zt_addiereMinuten($startzeit, $anzahlSlots * SLOT_DAUER);
 
+$formFields = array();
+if (handleForm()) {
+	// TODO löschen
+	header('Location: ' . $zurueckUrl, true, 302);
+	die();
+}
+	
 // Darstellung
 ?>
 
