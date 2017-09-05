@@ -17,7 +17,7 @@ header("Connection: close");
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 	<link rel="stylesheet" href="bootstrap.min.css">
-	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="styles.css?dummy=<?= time() ?>">
 	<script type="text/javascript" src="bootstrap.min.js"></script>
 </head>
 <body>

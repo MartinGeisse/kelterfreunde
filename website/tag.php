@@ -43,9 +43,8 @@ $belegungBlocks = dh_holeBelegungVollstaendig($datum['jahr'], $datum['monat'], $
 					echo '<td>', zt_zeitpunktText($slot['zeit']), '</td>';
 					if ($slot['belegt']) {
 						echo '<td class="belegt">';
-						echo '<span class="print-line">', $slot['name'], '</span>';
-						echo '<br class="hidden-print">';
-						echo '<span class="print-line">', $slot['telefonnummer'], '</span>';
+						echo '<div>', $slot['name'], '</div>';
+						echo '<div>', $slot['telefonnummer'], '</div>';
 						echo '</td>', "\n";
 					} else {
 						echo '<td class="frei">';

@@ -1,4 +1,17 @@
 
+@page {
+    margin: 0;
+    padding: 10mm;
+}
+
+@media print {
+    body {
+        width: 210mm;
+        height: 296mm;
+        margin: 0 auto 0;
+    }
+}
+
 body {
     background-color: #f9e9c8;
     color: #440610;
@@ -36,5 +49,11 @@ td.belegt {
 @media (max-width: 767px) {
 	.headline {
 		font-size: 1.8em;
+	}
+}
+
+@media print {
+	a[href]:after {
+		content: none !important;
 	}
 }

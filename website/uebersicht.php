@@ -48,6 +48,10 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 	</div>
 </h1>
 <br>
+<br class="visible-print-block">
+<br class="visible-print-block">
+<br class="visible-print-block">
+<br class="visible-print-block">
 
 <table class="table table-striped termintabelle">
 	<tr>
@@ -78,17 +82,13 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 							echo '<td class="belegt">';
 							if ($eingeloggt) {
 								if ($slot['name'] === null) {
-									echo '<div class="print-line" style="text-align: center">"</div>';
-									echo '<br class="hidden-print">';
-									echo '<span class="print-line">&nbsp;</span>';
-									echo '<br class="hidden-print">';
-									echo '<span class="print-line">&nbsp;</span>';
+									echo '<div>&nbsp;</div>';
+									echo '<div>&nbsp;&nbsp;&nbsp;| |</div>';
+									echo '<div>&nbsp;</div>';
 								} else {
-									echo '<span class="print-line">', $slot['name'], '</span>';
-									echo '<br class="hidden-print">';
-									echo '<span class="print-line">', $slot['telefonnummer'], '</span>';
-									echo '<br class="hidden-print">';
-									echo '<span class="print-line">', $slot['zentner'], ' Ztr.</span>';
+									echo '<div>', $slot['name'], '</div>';
+									echo '<div>', $slot['telefonnummer'], '</div>';
+									echo '<div>', $slot['zentner'], ' Ztr.</div>';
 								}
 							} else {
 								echo 'belegt';
