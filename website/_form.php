@@ -12,7 +12,7 @@ function handleForm() {
 		foreach ($_POST as $key => $value) {
 			if (array_key_exists($key, $formFields)) {
 				$value = trim($value);
-				if (!empty($value)) {
+				if ($value !== '') {
 					$formFields[$key] = $value;
 				}
 			}
