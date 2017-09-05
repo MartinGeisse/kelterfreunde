@@ -6,6 +6,7 @@ if (empty($including)) {
 
 define('SLOT_DAUER', 30);
 define('ANZAHL_BLOCKS', 2);
+define('GESPERRT_TEXT', 'Zur Zeit ist das Buchungssystem zu Verwaltungszwecken gesperrt.');
 
 function getBlockAnzahlSlots($block) {
 	if ($block == 0) {

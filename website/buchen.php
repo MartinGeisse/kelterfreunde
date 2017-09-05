@@ -9,6 +9,14 @@ require_once('_form.php');
 require_once('_responsive.php');
 require_once('_datenbank.php');
 require_once('_datenhaltung.php');
+require_once('_authorization.php');
+
+$sperre = dh_holeVariable('sperre');
+$eingeloggt = au_checkCookie();
+if ($sperre && !$eingeloggt) {
+	header('Location: gesperrt.php', true, 302);
+	die();
+}
 
 //
 // Verarbeitung der Querystring-Parameter
