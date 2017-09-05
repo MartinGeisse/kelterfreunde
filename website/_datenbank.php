@@ -78,5 +78,3 @@ function db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $nam
 	}
 	return true;
 }
-
-// TODO transaction support
