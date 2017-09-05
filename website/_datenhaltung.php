@@ -42,6 +42,7 @@ function _dh_holeBelegungIntern($jahr, $monat, $tag, $vollstaendig) {
 		if ($vollstaendig) {
 			$result[$blocknummer][$slotnummer]['name'] = $row['name'];
 			$result[$blocknummer][$slotnummer]['telefonnummer'] = $row['telefonnummer'];
+			$result[$blocknummer][$slotnummer]['zentner'] = $row['zentner'];
 		}
 	}
 

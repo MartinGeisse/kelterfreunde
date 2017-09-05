@@ -102,7 +102,7 @@ if (handleForm()) {
 		if ($anzahlSlots < 1) {
 			$anzahlSlots = 1;
 		}
-		$success = db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $anzahlSlots, $name, $telefonnummer, $zentner);
+		$success = dh_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $anzahlSlots, $name, $telefonnummer, $zentner);
 		if ($success) {
 			header('Location: '.($zurueckEinzeltag ? 'tag' : 'uebersicht').'.php?jahr='.$jahr.'&monat='.$monat.'&tag='.$tag, true, 302);
 		} else {

@@ -13,17 +13,20 @@ if ($databaseConnection->connect_error) {
 
 function db_beginTransaction() {
 	global $databaseConnection;
-	$databaseConnection->begin();
+	// $databaseConnection->begin();
+	$databaseConnection->autocommit(false);
 }
 
 function db_commitTransaction() {
 	global $databaseConnection;
 	$databaseConnection->commit();
+	$databaseConnection->autocommit(true);
 }
 
 function db_rollbackTransaction() {
 	global $databaseConnection;
 	$databaseConnection->rollback();
+	$databaseConnection->autocommit(true);
 }
 
 function db_holeBuchungenFuerTag($jahr, $monat, $tag, $felder) {
@@ -64,7 +67,7 @@ function db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $nam
 	if (!$statement) {
 		die('Datenbankänderung fehlgeschlagen (Schritt 1)');
 	}
-	$statement->bind_param('iiiiiss', $jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer, $zentner);
+	$statement->bind_param('iiiiissi', $jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer, $zentner);
 	$statement->execute();
 	$errors = $statement->error_list;
 	$statement->close();

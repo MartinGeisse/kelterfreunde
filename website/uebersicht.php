@@ -77,9 +77,19 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 						if ($slot['belegt']) {
 							echo '<td class="belegt">';
 							if ($eingeloggt) {
-								echo '<span class="print-line">', $slot['name'], '</span>';
-								echo '<br class="hidden-print">';
-								echo '<span class="print-line">', $slot['telefonnummer'], '</span>';
+								if ($slot['name'] === null) {
+									echo '<div class="print-line" style="text-align: center">"</div>';
+									echo '<br class="hidden-print">';
+									echo '<span class="print-line">&nbsp;</span>';
+									echo '<br class="hidden-print">';
+									echo '<span class="print-line">&nbsp;</span>';
+								} else {
+									echo '<span class="print-line">', $slot['name'], '</span>';
+									echo '<br class="hidden-print">';
+									echo '<span class="print-line">', $slot['telefonnummer'], '</span>';
+									echo '<br class="hidden-print">';
+									echo '<span class="print-line">', $slot['zentner'], ' Ztr.</span>';
+								}
 							} else {
 								echo 'belegt';
 							}
@@ -87,7 +97,9 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 						} else {
 							echo '<td class="frei">';
 							if ($eingeloggt) {
-								echo '<a href="', $buchenUrl, '" class="hidden-print">---</a><br class="hidden-print"><span class="hidden-print">&nbsp;</span>';
+								echo '<a href="', $buchenUrl, '" class="hidden-print">---</a>';
+								echo '<br class="hidden-print"><span class="hidden-print">&nbsp;</span>';
+								echo '<br class="hidden-print"><span class="hidden-print">&nbsp;</span>';
 								echo '<span class="visible-print-block">&nbsp;</span>';
 								echo '<span class="visible-print-block">&nbsp;</span>';
 							} else {
