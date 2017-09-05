@@ -43,12 +43,21 @@ $belegungBlocks = dh_holeBelegungVollstaendig($datum['jahr'], $datum['monat'], $
 					echo '<td>', zt_zeitpunktText($slot['zeit']), '</td>';
 					if ($slot['belegt']) {
 						echo '<td class="belegt">';
-						echo '<div>', $slot['name'], '</div>';
-						echo '<div>', $slot['telefonnummer'], '</div>';
+						if ($slot['name'] === null) {
+							echo '<div>&nbsp;</div>';
+							echo '<div>&nbsp;&nbsp;&nbsp;| |</div>';
+							echo '<div>&nbsp;</div>';
+						} else {
+							echo '<div>', $slot['name'], '</div>';
+							echo '<div>', $slot['telefonnummer'], '</div>';
+							echo '<div>', $slot['zentner'], ' Ztr.</div>';
+						}
 						echo '</td>', "\n";
 					} else {
 						echo '<td class="frei">';
-						echo '<a href="', $buchenUrl, '" class="hidden-print">---</a><br class="hidden-print"><span class="hidden-print">&nbsp;</span>';
+						echo '<a href="', $buchenUrl, '" class="hidden-print">---</a>';
+						echo '<br class="hidden-print"><span class="hidden-print">&nbsp;</span>';
+						echo '<br class="hidden-print"><span class="hidden-print">&nbsp;</span>';
 						echo '<span class="visible-print-block">&nbsp;</span>';
 						echo '<span class="visible-print-block">&nbsp;</span>';
 						echo '</td>', "\n";
