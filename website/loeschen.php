@@ -54,7 +54,7 @@ $endezeit = zt_addiereMinuten($startzeit, $anzahlSlots * SLOT_DAUER);
 
 $formFields = array();
 if (handleForm()) {
-	// TODO löschen
+	dh_loescheBuchung($jahr, $monat, $tag, $blocknummer, $slotnummer);
 	header('Location: ' . $zurueckUrl, true, 302);
 	die();
 }

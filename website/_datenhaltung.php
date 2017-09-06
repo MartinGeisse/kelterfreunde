@@ -24,7 +24,7 @@ function _dh_holeBelegungIntern($jahr, $monat, $tag, $vollstaendig) {
 
 	// mit Daten aus der Datenbank befüllen
 	if ($vollstaendig) {
-		$fields = array('blocknummer', 'slotnummer', 'name', 'telefonnummer', 'zentner');
+		$fields = array('id', 'blocknummer', 'slotnummer', 'name', 'telefonnummer', 'zentner');
 	} else {
 		$fields = array('blocknummer', 'slotnummer');
 	}
@@ -40,6 +40,7 @@ function _dh_holeBelegungIntern($jahr, $monat, $tag, $vollstaendig) {
 		}
 		$result[$blocknummer][$slotnummer]['belegt'] = true;
 		if ($vollstaendig) {
+			$result[$blocknummer][$slotnummer]['id'] = $row['id'];
 			$result[$blocknummer][$slotnummer]['name'] = $row['name'];
 			$result[$blocknummer][$slotnummer]['telefonnummer'] = $row['telefonnummer'];
 			$result[$blocknummer][$slotnummer]['zentner'] = $row['zentner'];
@@ -73,6 +74,22 @@ function dh_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummerStart,
 	return true;
 }
 
+function dh_loescheBuchung($jahr, $monat, $tag, $blocknummer, $slotnummerStart) {
+	$belegung = dh_holeBelegungVollstaendig($jahr, $monat, $tag);
+	if (empty($belegung[$blocknummer][$slotnummerStart]['name'])) {
+		return;
+	}
+	$block = $belegung[$blocknummer];
+	$ids = array($block[$slotnummerStart]['id']);
+	for ($i = 1; !empty($block[$slotnummerStart + $i]['id']); $i++) {
+		if (!empty($block[$slotnummerStart + $i]['name'])) {
+			break;
+		}
+		$ids[] = $block[$slotnummerStart + $i]['id'];
+	}
+	db_loescheBuchungen($ids);
+}
+	
 function dh_setzeVariable($name, $wert) {
 	db_setzeVariable($name, $wert);
 }

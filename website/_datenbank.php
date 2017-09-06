@@ -82,6 +82,30 @@ function db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $nam
 	return true;
 }
 
+function db_loescheBuchungen($ids) {
+	if (count($ids) < 1) {
+		return;
+	}
+	global $databaseConnection;
+	$query = 'DELETE FROM `buchungen` WHERE `id` IN (?' . str_repeat(', ?', count($ids) - 1) . ')';
+	$statement = $databaseConnection->prepare($query);
+	if (!$statement) {
+		die('Datenbankänderung fehlgeschlagen (Schritt 1)');
+	}
+	$parameters = array(str_repeat('i', count($ids)));
+	for ($i = 0; $i < count($ids); $i++) {
+		$parameters[] =& $ids[$i];
+	}
+	call_user_func_array(array($statement, 'bind_param'), $parameters); 
+	$statement->execute();
+	$errors = $statement->error_list;
+	$statement->close();
+	if (!empty($errors)) {
+		die('Datenbankänderung fehlgeschlagen (Schritt 2)');
+	}
+	return true;
+}
+
 function db_setzeVariable($name, $wert) {
 	global $databaseConnection;
 	$query = 'INSERT INTO `variablen` (`name`, `wert`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `wert` = ?';
