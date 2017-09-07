@@ -30,6 +30,7 @@ $sperre = dh_holeVariable('sperre');
 
 // Daten laden
 $belegungTage = array();
+$freigabeTage = array();
 $datum = $montag;
 for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 	if ($eingeloggt) {
@@ -38,6 +39,7 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 		$belegungBlocks = dh_holeBelegungBitmap($datum['jahr'], $datum['monat'], $datum['tag']);
 	}
 	array_push($belegungTage, $belegungBlocks);
+	array_push($freigabeTage, dh_istTagFreigeschaltet($datum['jahr'], $datum['monat'], $datum['tag']));
 	$datum = dt_addiereTage($datum, 1);
 }
 
@@ -121,7 +123,9 @@ require('_intro.php');
 								// echo '<td>', zt_zeitpunktText($slot['zeit']), ' - ', zt_zeitpunktText(zt_addiereMinuten($slot['zeit'], SLOT_DAUER)), '</td>', "\n";
 								echo '<td>', zt_zeitpunktText($slot['zeit']), '</td>', "\n";
 							}
-							if ($slot['belegt']) {
+							if (!$freigabeTage[$wochentagnummer - 1] && !$eingeloggt) {
+								echo '<td>&nbsp;</td>';
+							} else if ($slot['belegt']) {
 								echo '<td class="belegt">';
 								if ($eingeloggt) {
 									if ($slot['name'] === null) {
