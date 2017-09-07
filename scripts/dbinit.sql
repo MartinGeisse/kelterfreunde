@@ -1,5 +1,5 @@
 
-CREATE TABLE `kelterfreunde`.`buchungen` (
+CREATE TABLE `buchungen` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
 
     `jahr` SMALLINT NOT NULL,
@@ -14,9 +14,9 @@ CREATE TABLE `kelterfreunde`.`buchungen` (
 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;
-ALTER TABLE `kelterfreunde`.`buchungen` ADD UNIQUE `zeitindex` (`jahr`, `monat`, `tag`, `blocknummer`, `slotnummer`);
+ALTER TABLE `buchungen` ADD UNIQUE `zeitindex` (`jahr`, `monat`, `tag`, `blocknummer`, `slotnummer`);
 
-CREATE TABLE `kelterfreunde`.`variablen` (
+CREATE TABLE `variablen` (
     `name` VARCHAR(255) NOT NULL,
     `wert` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`name`)

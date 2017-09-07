@@ -10,7 +10,6 @@ require_once('_responsive.php');
 require_once('_datenbank.php');
 require_once('_datenhaltung.php');
 require_once('_authorization.php');
-require('_intro.php');
 
 $montag = getQuerystringMontag(true);
 $sonntag = dt_addiereTage($montag, 6);
@@ -43,6 +42,7 @@ for ($wochentagnummer = 1; $wochentagnummer <= 7; $wochentagnummer++) {
 }
 
 // Darstellung
+require('_intro.php');
 ?>
 
 <h1 class="headline">

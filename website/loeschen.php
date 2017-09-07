@@ -10,7 +10,6 @@ require_once('_responsive.php');
 require_once('_datenbank.php');
 require_once('_datenhaltung.php');
 require_once('_authorization.php');
-require('_intro.php');
 
 $eingeloggt = au_checkCookie();
 if (!$eingeloggt) {
@@ -60,6 +59,7 @@ if (handleForm()) {
 }
 	
 // Darstellung
+require('_intro.php');
 ?>
 
 <h1 class="headline">Buchung löschen</h1>
