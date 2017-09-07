@@ -36,6 +36,10 @@ $blocknummer = getQuerystringIntParameter('blocknummer', 0, ANZAHL_BLOCKS - 1);
 $slotnummer = getQuerystringIntParameter('slotnummer', 0, getBlockAnzahlSlots($blocknummer) - 1);
 $zurueckEinzeltag = !empty($_GET['zurueckInfo']);
 $zurueckUrl = ($zurueckEinzeltag ? 'tag' : 'uebersicht') . '.php?jahr=' . $jahr . '&monat=' . $monat . '&tag=' . $tag;
+if (!dh_istTagFreigeschaltet($jahr, $monat, $tag) && !$eingeloggt) {
+	header('Location: ' . $zurueckUrl, true, 302);
+	die();
+}
 
 //
 // lesbare Zeiten berechnen
