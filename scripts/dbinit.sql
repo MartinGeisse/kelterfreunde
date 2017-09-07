@@ -21,3 +21,14 @@ CREATE TABLE `variablen` (
     `wert` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`name`)
 ) ENGINE = InnoDB;
+
+CREATE TABLE `freigeschaltete_tage` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+
+    `jahr` SMALLINT NOT NULL,
+    `monat` TINYINT NOT NULL,
+    `tag` TINYINT NOT NULL,
+
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+ALTER TABLE `freigeschaltete_tage` ADD UNIQUE `tagindex` (`jahr`, `monat`, `tag`);

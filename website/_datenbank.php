@@ -141,3 +141,42 @@ function db_holeVariable($name) {
 	$statement->close();
 	return (string)$wert;
 }
+
+function db_istTagFreigeschaltet($jahr, $monat, $tag) {
+	global $databaseConnection;
+	$query = 'SELECT `id` FROM `freigeschaltete_tage` WHERE `jahr` = ? AND `monat` = ? AND `tag` = ?';
+	$statement = $databaseConnection->prepare($query);
+	if (!$statement) {
+		die('Datenbankabfrage fehlgeschlagen (Schritt 1)');
+	}
+	$statement->bind_param('iii', $jahr, $monat, $tag);
+	$statement->execute();
+	if (!empty($statement->error_list)) {
+		die('Datenbankabfrage fehlgeschlagen (Schritt 2)');
+	}
+	$id = null;
+	$statement->bind_result($id);
+	$statement->fetch();
+	$statement->close();
+	return ($id > 0);
+}
+
+function db_setzeObTagFreigeschaltet($jahr, $monat, $tag, $freigeschaltet) {
+	global $databaseConnection;
+	if ($freigeschaltet) {
+		$query = 'INSERT INTO `freigeschaltete_tage` (`jahr`, `monat`, `tag`) VALUES (?, ?, ?)';
+	} else {
+		$query = 'DELETE FROM `freigeschaltete_tage` WHERE `jahr` = ? AND `monat` = ? AND `tag` = ?';
+	}
+	$statement = $databaseConnection->prepare($query);
+	if (!$statement) {
+		die('Datenbankänderung fehlgeschlagen (Schritt 1)');
+	}
+	$statement->bind_param('iii', $jahr, $monat, $tag);
+	$statement->execute();
+	$errors = $statement->error_list;
+	$statement->close();
+	if (!empty($errors)) {
+		die('Datenbankänderung fehlgeschlagen (Schritt 2)');
+	}
+}

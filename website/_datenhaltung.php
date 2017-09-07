@@ -97,3 +97,11 @@ function dh_setzeVariable($name, $wert) {
 function dh_holeVariable($name) {
 	return db_holeVariable($name);
 }
+
+function dh_istTagFreigeschaltet($jahr, $monat, $tag) {
+	return db_istTagFreigeschaltet($jahr, $monat, $tag);
+}
+
+function dh_setzeObTagFreigeschaltet($jahr, $monat, $tag, $freigeschaltet) {
+	db_setzeObTagFreigeschaltet($jahr, $monat, $tag, $freigeschaltet);
+}
