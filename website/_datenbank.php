@@ -176,7 +176,9 @@ function db_setzeObTagFreigeschaltet($jahr, $monat, $tag, $freigeschaltet) {
 	$statement->execute();
 	$errors = $statement->error_list;
 	$statement->close();
-	if (!empty($errors)) {
+	if (count($errors) == 1 && $errors[0]['errno'] == 1062) {
+		// duplicate entry, das ist okay
+	} else if (!empty($errors)) {
 		die('Datenbankänderung fehlgeschlagen (Schritt 2)');
 	}
 }

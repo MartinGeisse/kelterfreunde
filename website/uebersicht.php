@@ -17,10 +17,16 @@ $eingeloggt = au_checkCookie();
 
 // Sperrfunktion
 if ($eingeloggt) {
-	$formFields = array('sperre' => null);
+	$formFields = array('sperre' => null, 'tagFreigabe' => null);
 	if (handleForm()) {
 		if (isset($formFields['sperre'])) {
 			dh_setzeVariable('sperre', !empty($formFields['sperre']));
+			header('Location: uebersicht.php?jahr='.$montag['jahr'].'&monat='.$montag['monat'].'&tag='.$montag['tag'], true, 302);
+			die();
+		}
+		if (isset($formFields['tagFreigabe'])) {
+			$datum = getQuerystringDatum(false);
+			dh_setzeObTagFreigeschaltet($datum['jahr'], $datum['monat'], $datum['tag'], $formFields['tagFreigabe']);
 			header('Location: uebersicht.php?jahr='.$montag['jahr'].'&monat='.$montag['monat'].'&tag='.$montag['tag'], true, 302);
 			die();
 		}
@@ -98,7 +104,13 @@ require('_intro.php');
 					}
 					echo dt_getWochentagAbkuerzungFuerNummer($wochentagnummer), '&nbsp;', $datum['tag'], '.', $datum['monat'];
 					if ($eingeloggt) {
-						echo '</a>';
+						$tagFreigegeben = $freigabeTage[$wochentagnummer - 1];
+						echo '</a><br><br>';
+						echo '<form method="POST" action="uebersicht.php?jahr=', $datum['jahr'], '&monat=', $datum['monat'], '&tag=', $datum['tag'], '">';
+						echo '<input type="hidden" name="tagFreigabe" value="', ($tagFreigegeben ? '0' : '1'), '">';
+						echo '<input class="btn btn-', ($tagFreigegeben ? 'success' : 'danger'),
+							'" style="display: block; width: 100%;" type="submit" value="', ($tagFreigegeben ? 'freigegeben' : 'gesperrt'), '">';
+						echo '</form>';
 					}
 					echo '</th>', "\n";
 					$datum = dt_addiereTage($datum, 1);
