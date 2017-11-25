@@ -24,6 +24,13 @@ if (handleForm()) {
 require('_intro.php');
 ?>
 <br>
+<div class="alert alert-warning" role="alert">
+	<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+	Achtung: Dieser Login-Bereich funktioniert auf Apple-Geräten (Safari-Browser) nur, wenn der Link auf dieses Loginformular
+	in einem neuen Tab oder Fenster geöffnet wird. Er funktioniert nicht, wenn das Formular innerhalb der Kelterfreunde-Seite
+	geöffnet wird.
+</div>
+<br>
 <form class="form" method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
 
 	<div><label for="passwort">Passwort</label></div>
