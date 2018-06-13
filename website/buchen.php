@@ -36,6 +36,7 @@ $blocknummer = getQuerystringIntParameter('blocknummer', 0, ANZAHL_BLOCKS - 1);
 $slotnummer = getQuerystringIntParameter('slotnummer', 0, getBlockAnzahlSlots($blocknummer) - 1);
 $zurueckEinzeltag = !empty($_GET['zurueckInfo']);
 $zurueckUrl = ($zurueckEinzeltag ? 'tag' : 'uebersicht') . '.php?jahr=' . $jahr . '&monat=' . $monat . '&tag=' . $tag;
+$weiterUrl = 'gebucht.php?jahr=' . $jahr . '&monat=' . $monat . '&tag=' . $tag;
 if (!dh_istTagFreigeschaltet($jahr, $monat, $tag) && !$eingeloggt) {
 	header('Location: ' . $zurueckUrl, true, 302);
 	die();
@@ -45,8 +46,7 @@ if (!dh_istTagFreigeschaltet($jahr, $monat, $tag) && !$eingeloggt) {
 // lesbare Zeiten berechnen
 //
 $blockStartzeit = getBlockStartzeit($blocknummer);
-$slotStartzeit = zt_addiereMinuten($blockStartzeit, $slotnummer * SLOT_DAUER);
-$slotEndezeit = zt_addiereMinuten($slotStartzeit, SLOT_DAUER);
+$buchungStartzeit = zt_addiereMinuten($blockStartzeit, $slotnummer * SLOT_DAUER);
 
 //
 // ggf. Formularverarbeitung
@@ -137,7 +137,8 @@ if (handleForm()) {
 			if (empty($validationErrors)) {
 				$success = dh_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $anzahlSlots, $name, $telefonnummer, $zentner);
 				if ($success) {
-					header('Location: ' . $zurueckUrl, true, 302);
+					$weiterUrl .= '&blocknummer=' . $blocknummer . '&slotnummer=' . $slotnummer . '&anzahlSlots=' . $anzahlSlots . '&zentner=' . $zentner;
+					header('Location: ' . $weiterUrl, true, 302);
 				} else {
 					header('Location: schon-gebucht.php', true, 302);
 				}
@@ -154,7 +155,7 @@ if (handleForm()) {
 //
 require('_intro.php');
 ?>
-<h1>Termin Buchen: <?= $tag ?>.<?= $monat ?>.<?= $jahr ?> <?= zt_zeitpunktText($slotStartzeit) ?> - <?= zt_zeitpunktText($slotEndezeit) ?></h1>
+<h1>Termin Buchen: <?= $tag ?>.<?= $monat ?>.<?= $jahr ?> ab <?= zt_zeitpunktText($buchungStartzeit) ?></h1>
 
 <form class="form" method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
 
