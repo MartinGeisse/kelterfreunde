@@ -24,3 +24,4 @@ Bitte beachten Sie:
 </ul>
 <p>
 <a href="uebersicht.php" class="btn btn-primary">Zum Buchungssystem</a>
+<?php require('_outro.php');
