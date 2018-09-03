@@ -7,7 +7,7 @@ Auf dieser Seite haben Sie die Möglichkeit, einen Keltertermin online zu verein
 Wunschtermin aus und klicken auf „buchen“.
 <p>
 Sie werden aufgefordert, Name, Telefonnummer sowie die Menge des zu kelternden Obstes einzugeben und mit
-„buchen“ zu bestätigen. Unsere Anlage verarbeitet in der Stunde ca. 7-8  Zentner (1 Zentner = 50Kg).
+„buchen“ zu bestätigen. Unsere Anlage verarbeitet in der Stunde ca. 7-8 Zentner (1 Zentner = 50kg, das ergibt ca. 30 Liter Saft).
 <p>
 Das Buchungsystem prüft, ob Ihre Menge zum Wunschtermin verarbeitet werden kann. Sollte das der Fall sein,
 erscheint die Terminseite und Ihr Termin ist als „belegt“ rot markiert und damit verbindlich gebucht.
