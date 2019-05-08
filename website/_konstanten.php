@@ -27,3 +27,7 @@ function getBlockStartzeit($block) {
 		die('ungültige Blocknummer: ' . $block);
 	}
 }
+
+function getSlotsFuerZentner($zentner) {
+	return floor(($zentner - 1) / 3) + 1;
+}

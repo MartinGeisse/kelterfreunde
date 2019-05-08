@@ -93,9 +93,9 @@ if (handleForm()) {
 		}
 	}
 
-	// Zentner Äpfel
+	// Zentner Obst
 	if (empty($formFields['zentner']) || empty(trim($formFields['zentner']))) {
-		$validationErrors['zentner'] = 'Bitte geben Sie hier an, wieviele Zentner Äpfel gekeltert werden sollen.';
+		$validationErrors['zentner'] = 'Bitte geben Sie hier an, wieviel Obst gekeltert werden sollen.';
 	} else {
 		$zentnerText = trim($formFields['zentner']);
 		$zentner = (float)$zentnerText;
@@ -113,10 +113,7 @@ if (handleForm()) {
 	if (empty($validationErrors)) {
 
 		// die Anzahl an Slots für die Anzahl Zentner berechnen
-		$anzahlSlots = floor(($zentner - 1) / 3) + 1;
-		if ($anzahlSlots < 1) {
-			$anzahlSlots = 1;
-		}
+		$anzahlSlots = getSlotsFuerZentner($zentner);
 
 		// Prüfen, ob die Termine schon belegt sind. Diese Prüfung ist nicht Teil der Transaktion, da uns das ohne ein definiertes 
 		// Isolationslevel nicht helfen würde. Eine Parallele Buchung wird stattdessen über einen Unique Key abgefangen.
@@ -169,9 +166,18 @@ require('_intro.php');
 	<div><input class="form-control" type="text" name="telefonnummer" value="<?= htmlspecialchars($formFields['telefonnummer']) ?>"></div>
 	<br>
 
-	<div><label for="zentner">Zentner Äpfel</label></div>
+	<div><label for="zentner">Menge</label></div>
 	<?php printValidationError('zentner'); ?>
-	<div><input class="form-control" type="text" name="zentner" value="<?= htmlspecialchars($formFields['zentner']) ?>"></div>
+	<div>
+		<select class="form-control" type="text" name="zentner" value="<?= htmlspecialchars($formFields['zentner']) ?>">
+			<option value=""></option>
+			<?php for ($i = 1; $i <= 20; $i++): ?>
+				<option value="<?= $i ?>" <?= ($formFields['zentner'] == $i ? 'selected="selected" ' : '') ?>>
+					<?= ($i * 50) ?>kg (<?= $i ?> Zentner; <?= (getSlotsFuerZentner($i) * SLOT_DAUER) ?> Minuten)
+				</option>
+			<?php endfor; ?>
+		</select>
+	</div>
 	<br>
 	
 	<div><input class="btn btn-primary" type="submit" value="buchen"> oder <a href="<?= $zurueckUrl ?>">zurück</a></div>
