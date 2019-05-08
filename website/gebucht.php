@@ -49,7 +49,7 @@ require('_intro.php');
 
 <div>Datum: <?= $tag ?>.<?= $monat ?>.<?= $jahr ?></div>
 <div>Uhrzeit: <?= zt_zeitpunktText($buchungStartzeit) ?> - <?= zt_zeitpunktText($buchungEndezeit) ?></div>
-<div>Menge: <?= $zentner ?> Zentner</div>
+<div>Menge: <?= ($zentner * 50) ?>kg (<?= $zentner ?> Zentner)</div>
 <br>
 <div><a href="<?= $zurueckUrl ?>" class="btn btn-primary"> Zurück zur Übersicht</a></div>
 
