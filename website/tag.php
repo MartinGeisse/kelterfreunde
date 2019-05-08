@@ -51,6 +51,7 @@ $belegungBlocks = dh_holeBelegungVollstaendig($datum['jahr'], $datum['monat'], $
 							echo '<div>', $slot['name'], '</div>';
 							echo '<div>', $slot['telefonnummer'], '</div>';
 							echo '<div>', $slot['zentner'], ' Ztr.</div>';
+							echo '<div>', getObstsortenName($slot['obstsorte']), '</div>';
 						}
 						echo '</td>', "\n";
 					} else {

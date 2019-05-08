@@ -31,3 +31,18 @@ function getBlockStartzeit($block) {
 function getSlotsFuerZentner($zentner) {
 	return floor(($zentner - 1) / 3) + 1;
 }
+
+$obstsortenNamen = array(
+	'A' => 'Äpfel',
+	'Q' => 'Quitten',
+	'T' => 'Trauben'
+);
+
+function getObstsortenName($obstsorte) {
+	global $obstsortenNamen;
+	if (isset($obstsortenNamen[$obstsorte])) {
+		return $obstsortenNamen[$obstsorte];
+	} else {
+		return $obstsorte;
+	}
+}

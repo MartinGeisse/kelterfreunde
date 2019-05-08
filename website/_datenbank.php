@@ -60,14 +60,14 @@ function db_holeBuchungenFuerTag($jahr, $monat, $tag, $felder) {
 	return $resultRows;
 }
 
-function db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer, $zentner) {
+function db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer, $zentner, $obstsorte) {
 	global $databaseConnection;
-	$query = 'INSERT INTO `buchungen` (`jahr`, `monat`, `tag`, `blocknummer`, `slotnummer`, `name`, `telefonnummer`, `zentner`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+	$query = 'INSERT INTO `buchungen` (`jahr`, `monat`, `tag`, `blocknummer`, `slotnummer`, `name`, `telefonnummer`, `zentner`, `obstsorte`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
 	$statement = $databaseConnection->prepare($query);
 	if (!$statement) {
 		die('Datenbankänderung fehlgeschlagen (Schritt 1)');
 	}
-	$statement->bind_param('iiiiissi', $jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer, $zentner);
+	$statement->bind_param('iiiiissis', $jahr, $monat, $tag, $blocknummer, $slotnummer, $name, $telefonnummer, $zentner, $obstsorte);
 	$statement->execute();
 	$errors = $statement->error_list;
 	$statement->close();

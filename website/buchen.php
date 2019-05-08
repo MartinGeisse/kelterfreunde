@@ -132,7 +132,8 @@ if (handleForm()) {
 				}
 			}
 			if (empty($validationErrors)) {
-				$success = dh_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $anzahlSlots, $name, $telefonnummer, $zentner);
+				$obstsorte = 'T'; // TODO
+				$success = dh_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $anzahlSlots, $name, $telefonnummer, $zentner, $obstsorte);
 				if ($success) {
 					$weiterUrl .= '&blocknummer=' . $blocknummer . '&slotnummer=' . $slotnummer . '&anzahlSlots=' . $anzahlSlots . '&zentner=' . $zentner;
 					header('Location: ' . $weiterUrl, true, 302);

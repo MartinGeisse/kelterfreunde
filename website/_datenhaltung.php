@@ -24,7 +24,7 @@ function _dh_holeBelegungIntern($jahr, $monat, $tag, $vollstaendig) {
 
 	// mit Daten aus der Datenbank befüllen
 	if ($vollstaendig) {
-		$fields = array('id', 'blocknummer', 'slotnummer', 'name', 'telefonnummer', 'zentner');
+		$fields = array('id', 'blocknummer', 'slotnummer', 'name', 'telefonnummer', 'zentner', 'obstsorte');
 	} else {
 		$fields = array('blocknummer', 'slotnummer');
 	}
@@ -44,6 +44,7 @@ function _dh_holeBelegungIntern($jahr, $monat, $tag, $vollstaendig) {
 			$result[$blocknummer][$slotnummer]['name'] = $row['name'];
 			$result[$blocknummer][$slotnummer]['telefonnummer'] = $row['telefonnummer'];
 			$result[$blocknummer][$slotnummer]['zentner'] = $row['zentner'];
+			$result[$blocknummer][$slotnummer]['obstsorte'] = $row['obstsorte'];
 		}
 	}
 
@@ -58,9 +59,9 @@ function dh_holeBelegungVollstaendig($jahr, $monat, $tag) {
 	return _dh_holeBelegungIntern($jahr, $monat, $tag, true);
 }
 
-function dh_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummerStart, $anzahlSlots, $name, $telefonnummer, $zentner) {
+function dh_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummerStart, $anzahlSlots, $name, $telefonnummer, $zentner, $obstsorte) {
 	db_beginTransaction();
-	if (!db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummerStart, $name, $telefonnummer, $zentner)) {
+	if (!db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummerStart, $name, $telefonnummer, $zentner, $obstsorte)) {
 		db_rollbackTransaction();
 		return false;
 	}

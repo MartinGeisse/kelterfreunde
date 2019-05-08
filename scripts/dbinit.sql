@@ -11,6 +11,7 @@ CREATE TABLE `buchungen` (
     `name` VARCHAR(255) NULL,
     `telefonnummer` VARCHAR(255) NULL,
 	`zentner` TINYINT NULL,
+    `obstsorte` VARCHAR(1) NULL,
 
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;

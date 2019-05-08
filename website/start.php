@@ -6,7 +6,7 @@ require('_intro.php');
 Auf dieser Seite haben Sie die Möglichkeit, einen Keltertermin online zu vereinbaren. Suchen Sie sich Ihren
 Wunschtermin aus und klicken auf „buchen“.
 <p>
-Sie werden aufgefordert, Name, Telefonnummer sowie die Menge des zu kelternden Obstes einzugeben und mit
+Sie werden aufgefordert, Name, Telefonnummer sowie die Menge und Art des zu kelternden Obstes einzugeben und mit
 „buchen“ zu bestätigen. Unsere Anlage verarbeitet in der Stunde ca. 350-400kg (7-8 Zentner). 50kg ergeben ca. 30 Liter Saft.
 <p>
 Das Buchungsystem prüft, ob Ihre Menge zum Wunschtermin verarbeitet werden kann. Sollte das der Fall sein,

@@ -71,6 +71,7 @@ require('_intro.php');
 	<tr><td>Name:</td><td><?= $buchung['name'] ?></td></tr>
 	<tr><td>Telefon:</td><td><?= $buchung['telefonnummer'] ?></td></tr>
 	<tr><td>Menge:</td><td><?= $buchung['zentner'] ?> Ztr.</td></tr>
+	<tr><td>Obstsorte:</td><td><?= getObstsortenName($buchung['obstsorte']) ?></td></tr>
 </table>
 
 <form class="form" method="POST" action="<?= $_SERVER['REQUEST_URI'] ?>">
