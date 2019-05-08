@@ -45,7 +45,7 @@ $buchungEndezeit = zt_addiereMinuten($buchungStartzeit, $anzahlSlots * SLOT_DAUE
 //
 require('_intro.php');
 ?>
-<h1>Ihr Termin wurde gebucht</h1>
+<h1>Ihr Termin wurde verbindlich gebucht</h1>
 
 <div>Datum: <?= $tag ?>.<?= $monat ?>.<?= $jahr ?></div>
 <div>Uhrzeit: <?= zt_zeitpunktText($buchungStartzeit) ?> - <?= zt_zeitpunktText($buchungEndezeit) ?></div>
