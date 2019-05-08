@@ -29,6 +29,7 @@ $blocknummer = getQuerystringIntParameter('blocknummer', 0, ANZAHL_BLOCKS - 1);
 $slotnummer = getQuerystringIntParameter('slotnummer', 0, getBlockAnzahlSlots($blocknummer) - 1);
 $anzahlSlots = getQuerystringIntParameter('anzahlSlots', 1);
 $zentner = getQuerystringIntParameter('zentner', 1);
+$obstsorte = $_GET['obstsorte'];
 $zurueckEinzeltag = !empty($_GET['zurueckInfo']);
 $zurueckUrl = ($zurueckEinzeltag ? 'tag' : 'uebersicht') . '.php?jahr=' . $jahr . '&monat=' . $monat . '&tag=' . $tag;
 
@@ -50,6 +51,7 @@ require('_intro.php');
 <div>Datum: <?= $tag ?>.<?= $monat ?>.<?= $jahr ?></div>
 <div>Uhrzeit: <?= zt_zeitpunktText($buchungStartzeit) ?> - <?= zt_zeitpunktText($buchungEndezeit) ?></div>
 <div>Menge: <?= ($zentner * 50) ?>kg (<?= $zentner ?> Zentner)</div>
+<div>Obstsorte: <?= getObstsortenName($obstsorte) ?></div>
 <br>
 <div><a href="<?= $zurueckUrl ?>" class="btn btn-primary"> Zurück zur Übersicht</a></div>
 

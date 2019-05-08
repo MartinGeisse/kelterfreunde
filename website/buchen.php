@@ -55,6 +55,7 @@ $formFields = array(
 	'name' => '',
 	'telefonnummer' => '',
 	'zentner' => '',
+	'obstsorte' => '',
 );
 if (handleForm()) {
 
@@ -109,6 +110,16 @@ if (handleForm()) {
 		}
 	}
 
+	// Obstsorte
+	if (empty($formFields['obstsorte']) || empty(trim($formFields['obstsorte']))) {
+		$validationErrors['obstsorte'] = 'Bitte geben Sie hier Ihre Obstsorte an.';
+	} else {
+		$obstsorte = trim($formFields['obstsorte']);
+		if (empty($obstsortenNamen[$obstsorte])) {
+			$validationErrors['obstsorte'] = 'Ungültige Eingabe';
+		}
+	}
+
 	// weitere Verarbeitung
 	if (empty($validationErrors)) {
 
@@ -132,10 +143,10 @@ if (handleForm()) {
 				}
 			}
 			if (empty($validationErrors)) {
-				$obstsorte = 'T'; // TODO
 				$success = dh_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummer, $anzahlSlots, $name, $telefonnummer, $zentner, $obstsorte);
 				if ($success) {
-					$weiterUrl .= '&blocknummer=' . $blocknummer . '&slotnummer=' . $slotnummer . '&anzahlSlots=' . $anzahlSlots . '&zentner=' . $zentner;
+					$weiterUrl .= '&blocknummer=' . $blocknummer . '&slotnummer=' . $slotnummer . '&anzahlSlots=' . $anzahlSlots .
+						'&zentner=' . $zentner . '&obstsorte=' . $obstsorte;
 					header('Location: ' . $weiterUrl, true, 302);
 				} else {
 					header('Location: schon-gebucht.php', true, 302);
@@ -170,13 +181,27 @@ require('_intro.php');
 	<div><label for="zentner">Menge</label></div>
 	<?php printValidationError('zentner'); ?>
 	<div>
-		<select class="form-control" type="text" name="zentner" value="<?= htmlspecialchars($formFields['zentner']) ?>">
+		<select class="form-control" name="zentner" value="<?= htmlspecialchars($formFields['zentner']) ?>">
 			<option value=""></option>
 			<?php for ($i = 1; $i <= 20; $i++): ?>
 				<option value="<?= $i ?>" <?= ($formFields['zentner'] == $i ? 'selected="selected" ' : '') ?>>
 					<?= ($i * 50) ?>kg (<?= $i ?> Zentner; <?= (getSlotsFuerZentner($i) * SLOT_DAUER) ?> Minuten)
 				</option>
 			<?php endfor; ?>
+		</select>
+	</div>
+	<br>
+
+	<div><label for="obstsorte">Obstsorte</label></div>
+	<?php printValidationError('obstsorte'); ?>
+	<div>
+		<select class="form-control" name="obstsorte" value="<?= htmlspecialchars($formFields['obstsorte']) ?>">
+			<option value=""></option>
+			<?php foreach ($obstsortenNamen as $obstsorte => $obstsorteName): ?>
+				<option value="<?= $obstsorte ?>" <?= ($formFields['obstsorte'] == $obstsorte ? 'selected="selected" ' : '') ?>>
+					<?= $obstsorteName ?>
+				</option>
+			<?php endforeach; ?>
 		</select>
 	</div>
 	<br>
