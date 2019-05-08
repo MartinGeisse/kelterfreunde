@@ -113,7 +113,7 @@ if (handleForm()) {
 	if (empty($validationErrors)) {
 
 		// die Anzahl an Slots für die Anzahl Zentner berechnen
-		$anzahlSlots = round($zentner / 3);
+		$anzahlSlots = floor(($zentner - 1) / 3) + 1;
 		if ($anzahlSlots < 1) {
 			$anzahlSlots = 1;
 		}
