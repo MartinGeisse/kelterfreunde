@@ -55,7 +55,7 @@ $formFields = array(
 	'name' => '',
 	'telefonnummer' => '',
 	'zentner' => '',
-	'obstsorte' => '',
+	'obstsorte' => 'A',
 );
 if (handleForm()) {
 
@@ -181,7 +181,7 @@ require('_intro.php');
 	<div><label for="zentner">Menge</label></div>
 	<?php printValidationError('zentner'); ?>
 	<div>
-		<select class="form-control" name="zentner" value="<?= htmlspecialchars($formFields['zentner']) ?>">
+		<select class="form-control" name="zentner">
 			<option value=""></option>
 			<?php for ($i = 1; $i <= 20; $i++): ?>
 				<option value="<?= $i ?>" <?= ($formFields['zentner'] == $i ? 'selected="selected" ' : '') ?>>
@@ -195,8 +195,7 @@ require('_intro.php');
 	<div><label for="obstsorte">Obstsorte</label></div>
 	<?php printValidationError('obstsorte'); ?>
 	<div>
-		<select class="form-control" name="obstsorte" value="<?= htmlspecialchars($formFields['obstsorte']) ?>">
-			<option value=""></option>
+		<select class="form-control" name="obstsorte">
 			<?php foreach ($obstsortenNamen as $obstsorte => $obstsorteName): ?>
 				<option value="<?= $obstsorte ?>" <?= ($formFields['obstsorte'] == $obstsorte ? 'selected="selected" ' : '') ?>>
 					<?= $obstsorteName ?>
