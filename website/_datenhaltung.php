@@ -66,7 +66,7 @@ function dh_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummerStart,
 		return false;
 	}
 	for ($i = 1; $i < $anzahlSlots; $i++) {
-		if (!db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummerStart + $i, null, null, null)) {
+		if (!db_fuegeBuchungEin($jahr, $monat, $tag, $blocknummer, $slotnummerStart + $i, null, null, null, null)) {
 			db_rollbackTransaction();
 			return false;
 		}
