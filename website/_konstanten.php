@@ -10,7 +10,7 @@ define('GESPERRT_TEXT', 'Zur Zeit ist das Buchungssystem zu Verwaltungszwecken g
 
 function getBlockAnzahlSlots($block) {
 	if ($block == 0) {
-		return 8;
+		return 10;
 	} else if ($block == 1) {
 		return 9;
 	} else {
@@ -20,7 +20,7 @@ function getBlockAnzahlSlots($block) {
 
 function getBlockStartzeit($block) {
 	if ($block == 0) {
-		return array(9, 40);
+		return array(9, 0);
 	} else if ($block == 1) {
 		return array(13, 40);
 	} else {
