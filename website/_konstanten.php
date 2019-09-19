@@ -34,6 +34,7 @@ function getSlotsFuerZentner($zentner) {
 
 $obstsortenNamen = array(
 	'A' => 'Äpfel',
+	'B' => 'Birnen',
 	'Q' => 'Quitten',
 	'T' => 'Trauben'
 );
